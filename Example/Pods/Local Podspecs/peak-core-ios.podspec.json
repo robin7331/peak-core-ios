@@ -1,0 +1,22 @@
+{
+  "name": "peak-core-ios",
+  "version": "0.1.0",
+  "summary": "A short description of peak-core-ios.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/<GITHUB_USERNAME>/peak-core-ios",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Robin Reiter": "robin7331@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/peak-core-ios.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "peak-core-ios/Classes/**/*"
+}
