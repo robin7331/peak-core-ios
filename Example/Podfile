@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'peak-core-ios_Example' do
+  pod 'peak-core-ios', :path => '../'
+
+  target 'peak-core-ios_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
