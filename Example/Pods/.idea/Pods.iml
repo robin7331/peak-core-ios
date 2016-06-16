@@ -9,14 +9,14 @@
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/peak-core-ios/peak-core-ios.xcconfig" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/peak-core-ios/peak-core-ios-prefix.pch" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/peak-core-ios/peak-core-ios-dummy.m" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-acknowledgements.markdown" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-dummy.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-acknowledgements.plist" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-resources.sh" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests.modulemap" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-frameworks.sh" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests.release.xcconfig" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Info.plist" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-dummy.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-acknowledgements.markdown" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-umbrella.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests.debug.xcconfig" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example.debug.xcconfig" isTestSource="false" />
