@@ -10,7 +10,7 @@
 #import "PeakViewController.h"
 
 #import <peak_core_ios/PeakCore.h>
-#import "PeakUserland.h"
+#import <peak_core_ios/PeakUserland.h>
 
 @interface PeakViewController ()
 
