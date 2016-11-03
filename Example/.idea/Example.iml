@@ -49,13 +49,14 @@
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakCore.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakModule.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakWebViewContainer.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakUserland.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/Models/MethodDefinition.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/Models/MethodDefinition.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/Models/NativeCall.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/Models/NativeCall.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakCore.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakWebViewContainer.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/ReplaceMe.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakUserland.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakModule.m" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
