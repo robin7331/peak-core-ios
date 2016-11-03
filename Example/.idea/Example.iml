@@ -10,40 +10,40 @@
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/peak-core-ios/peak-core-ios.xcconfig" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/peak-core-ios/peak-core-ios-prefix.pch" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/peak-core-ios/peak-core-ios-dummy.m" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-dummy.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-acknowledgements.markdown" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-acknowledgements.plist" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-resources.sh" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests.modulemap" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-frameworks.sh" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests.release.xcconfig" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Info.plist" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-acknowledgements.markdown" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-dummy.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-umbrella.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests.debug.xcconfig" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-resources.sh" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-acknowledgements.markdown" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-dummy.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example.modulemap" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-acknowledgements.markdown" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example.release.xcconfig" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example.debug.xcconfig" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-umbrella.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-acknowledgements.plist" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Info.plist" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-frameworks.sh" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Info.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-acknowledgements.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-resources.sh" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/PeakViewController.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/Main.storyboard" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/PeakAppDelegate.m" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/peak-core-ios-Info.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/PeakViewController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/en.lproj/InfoPlist.strings" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/PeakAppDelegate.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/main.m" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/Images.xcassets" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/PeakViewController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/peak-core-ios-Info.plist" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/peak-core-ios-Prefix.pch" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/en.lproj/InfoPlist.strings" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Tests/Tests-Prefix.pch" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Tests/en.lproj/InfoPlist.strings" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Tests/Tests-Info.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/Images.xcassets" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Tests/Tests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Tests/Tests-Prefix.pch" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Tests/Tests-Info.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Tests/en.lproj/InfoPlist.strings" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Podfile" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios.podspec" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakCore.m" isTestSource="false" />
@@ -55,6 +55,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/Models/NativeCall.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakCore.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakWebViewContainer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/ReplaceMe.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakModule.m" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />

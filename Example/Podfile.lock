@@ -1,16 +1,16 @@
 PODS:
-  - peak-core-ios (0.1.0)
+  - peak-core-ios (0.1.2)
 
 DEPENDENCIES:
   - peak-core-ios (from `../`)
 
 EXTERNAL SOURCES:
   peak-core-ios:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
-  peak-core-ios: f8a653fbaaa7d7ef0d9bba34f85f9f9c54325ece
+  peak-core-ios: a45f173392574a69ec50466c515698f8340e392e
 
 PODFILE CHECKSUM: 38c4ec3fb6248f7c58bd78dbab4203500437a385
 
-COCOAPODS: 1.0.0.beta.3
+COCOAPODS: 1.1.0.rc.3

@@ -1,6 +1,8 @@
 # OS X
 .DS_Store
 
+Example/Pods/
+
 # Xcode
 build/
 *.pbxuser
@@ -23,6 +25,7 @@ DerivedData
 #AppCode
 # User-specific stuff:
 .idea/workspace.xml
+Example/.idea/workspace.xml
 .idea/tasks.xml
 
 # Sensitive or high-churn files:

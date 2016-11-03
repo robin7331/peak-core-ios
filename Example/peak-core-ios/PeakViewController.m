@@ -6,12 +6,11 @@
 //  Copyright © 2016 Robin Reiter. All rights reserved.
 //
 
+
 #import "PeakViewController.h"
 
-#import "PeakCore.h"
-#import "PeakModule.h"
+#import <peak_core_ios/PeakCore.h>
 #import "PeakUserland.h"
-#import "PeakWebViewContainer.h"
 
 @interface PeakViewController ()
 
