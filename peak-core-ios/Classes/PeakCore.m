@@ -96,6 +96,8 @@
     [self callJSFunctionName:functionName inNamespace:namespace withPayload:nil andCallback:nil];
 }
 
+
+
 - (void)callJSFunctionName:(NSString *)functionName inNamespace:(NSString *)namespace withPayload:(id)payload {
     [self callJSFunctionName:functionName inNamespace:namespace withPayload:payload andCallback:nil];
 }

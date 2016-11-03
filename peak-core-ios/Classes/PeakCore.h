@@ -6,6 +6,9 @@
 #import <Foundation/Foundation.h>
 #import <WebKit/WebKit.h>
 
+#import "PeakModule.h"
+#import "PeakWebViewContainer.h"
+
 @class PeakModule;
 
 typedef void (^PeakCoreCallback)(id callbackPayload);
