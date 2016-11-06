@@ -8,6 +8,7 @@
 
 @class PeakCore;
 
+typedef void (^PeakCoreCallback)(id callbackPayload);
 
 @interface PeakModule : NSObject
 @property NSString *name;

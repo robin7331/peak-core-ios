@@ -23,7 +23,7 @@
     if (self) {
         _namespace = @"peakCore";
         _name = @"peak-core-ios";
-        _version = @"0.1.4";
+        _version = @"0.1.5";
         _modules = [@{} mutableCopy];
 
         WKUserContentController *contentController = [[WKUserContentController alloc] init];
