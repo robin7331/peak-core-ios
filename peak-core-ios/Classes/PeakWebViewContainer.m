@@ -16,10 +16,6 @@
     core.webView = _webView;
     [self addSubview:_webView];
     return _webView;
-
-
-//    [_webView loadVueAppWithID:@"listView"];
-
 }
 
 - (void)layoutSubviews {

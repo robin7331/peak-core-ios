@@ -23,7 +23,7 @@
     if (self) {
         _namespace = @"peakCore";
         _name = @"peak-core-ios";
-        _version = @"1.0.0";
+        _version = @"0.1.4";
         _modules = [@{} mutableCopy];
 
         WKUserContentController *contentController = [[WKUserContentController alloc] init];
@@ -102,7 +102,7 @@
     [self callJSFunctionName:functionName inNamespace:namespace withPayload:payload andCallback:nil];
 }
 
-- (void)callJSFunctionName:(NSString *)functionName inNamespace:(NSString *)namespace withCallback:(id)callback {
+- (void)callJSFunctionName:(NSString *)functionName inNamespace:(NSString *)namespace withCallback:(PeakCoreCallback)callback {
     [self callJSFunctionName:functionName inNamespace:namespace withPayload:nil andCallback:callback];
 }
 

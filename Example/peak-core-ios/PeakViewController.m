@@ -23,10 +23,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.automaticallyAdjustsScrollViewInsets = NO;
 
     PeakCore *core = [[PeakCore alloc] init];
     self.webView = [self.peakWebView generateWKWebViewWithPeakCore:core];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://localhost:3000/"]]];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.188.22:8080/"]]];
 
     self.userland = [core useModule:[PeakUserland class]];
     self.userland.target = self;
@@ -37,7 +38,7 @@
 
     //    [self.webView evaluateJavaScript:@"Vue.NativeInterface.callJS('helloWorld');" completionHandler:nil];
 
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.0.14:3000/"]]];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://localhost:8080/"]]];
 }
 
 - (void)openURL:(NSString *)url {
