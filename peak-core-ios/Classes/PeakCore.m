@@ -15,7 +15,7 @@
 @end
 
 @implementation PeakCore {
-
+    PeakCoreOnReadyCallback _onReadyCallback;
 }
 
 - (instancetype)init {
@@ -36,6 +36,38 @@
     }
 
     return self;
+}
+
+- (void)loadPeakComponentWithName:(NSString *)name {
+    [self loadPeakComponentWithName:name withCompletion:nil];
+}
+
+- (void)loadPeakComponentWithName:(NSString *)name withCompletion:(PeakCoreOnReadyCallback)callback  {
+
+    if (self.webView == nil) {
+        [self logError:@"PeakCore has no WKWebView. Cannot load Peak Component"];
+        return;
+    }
+
+    _onReadyCallback = callback;
+
+    NSString *dirName = [NSString stringWithFormat:@"peak-components/%@", name];
+    NSString *absoluteDirName = [NSString stringWithFormat:@"/peak-components/%@", name];
+
+    NSURL *path = [[NSBundle mainBundle] URLForResource:@"index" withExtension:@"html" subdirectory:dirName];
+
+    NSURL *url = [NSURL fileURLWithPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:absoluteDirName] isDirectory:YES];
+    [self.webView loadFileURL:path allowingReadAccessToURL:url];
+}
+
+
+- (void)loadPeakComponentWithURL:(NSURL *)url {
+    [self loadPeakComponentWithURL:url withCompletion:nil];
+}
+
+- (void)loadPeakComponentWithURL:(NSURL *)url withCompletion:(PeakCoreOnReadyCallback)callback {
+    _onReadyCallback = callback;
+    [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
 
@@ -245,6 +277,13 @@
 - (void)logError:(id)message {
     NSLog(message);
 //    [[NSException exceptionWithName:message reason:@"" userInfo:nil] raise];
+}
+
+- (void)onReady {
+    if (_onReadyCallback) {
+        _onReadyCallback();
+        _onReadyCallback = nil;
+    }
 }
 
 @end

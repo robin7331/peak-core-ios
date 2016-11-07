@@ -27,10 +27,18 @@
 
     PeakCore *core = [[PeakCore alloc] init];
     self.webView = [self.peakWebView generateWKWebViewWithPeakCore:core];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.188.22:8080/"]]];
 
     self.userland = [core useModule:[PeakUserland class]];
     self.userland.target = self;
+
+    self.webView.hidden = YES;
+//    [core loadPeakComponentWithName:@"visual-alerts" withCompletion:^{
+//        self.webView.hidden = NO;
+//    }];
+
+    [core loadPeakComponentWithURL:[NSURL URLWithString:@"http://192.168.188.22:3000/visual-alerts/"] withCompletion:^{
+        self.webView.hidden = NO;
+    }];
 
 }
 
