@@ -25,5 +25,5 @@ typedef void (^PeakCoreCallback)(id callbackPayload);
 - (void)callJSFunctionName:(NSString *)functionName;
 - (void)callJSFunctionName:(NSString *)functionName withPayload:(id)payload;
 - (void)callJSFunctionName:(NSString *)functionName withCallback:(PeakCoreCallback)callback;
-- (void)callJSFunctionName:(NSString *)functionName inNamespace:(NSString *)namespace withPayload:(id)payload andCallback:(PeakCoreCallback)callback;
+- (void)callJSFunctionName:(NSString *)functionName withPayload:(id)payload andCallback:(PeakCoreCallback)callback;
 @end

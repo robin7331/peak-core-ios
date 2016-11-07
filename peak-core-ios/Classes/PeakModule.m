@@ -37,11 +37,11 @@
     [self.peak callJSFunctionName:functionName inNamespace:self.namespace withPayload:payload];
 }
 
-- (void)callJSFunctionName:(NSString *)functionName withCallback:(id)callback {
+- (void)callJSFunctionName:(NSString *)functionName withCallback:(PeakCoreCallback)callback {
     [self.peak callJSFunctionName:functionName inNamespace:self.namespace withPayload:nil andCallback:callback];
 }
 
-- (void)callJSFunctionName:(NSString *)functionName inNamespace:(NSString *)namespace withPayload:(id)payload andCallback:(PeakCoreCallback)callback {
+- (void)callJSFunctionName:(NSString *)functionName withPayload:(id)payload andCallback:(PeakCoreCallback)callback {
     [self.peak callJSFunctionName:functionName inNamespace:self.namespace withPayload:payload andCallback:callback];
 }
 
