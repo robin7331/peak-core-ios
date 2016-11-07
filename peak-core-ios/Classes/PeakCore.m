@@ -23,7 +23,7 @@
     if (self) {
         _namespace = @"peakCore";
         _name = @"peak-core-ios";
-        _version = @"0.1.7";
+        _version = @"0.1.8";
         _modules = [@{} mutableCopy];
 
         WKUserContentController *contentController = [[WKUserContentController alloc] init];
@@ -155,7 +155,7 @@
     NSString *jsFunctionCall;
     if (payload) {
         NSString *serializedPayload = [self serializePayload:payload];
-        jsFunctionCall = [NSString stringWithFormat:@"window.peak.callJS('%@', '%@', '%@');", namespace, functionName, serializedPayload];
+        jsFunctionCall = [NSString stringWithFormat:@"window.peak.callJS('%@', '%@', %@);", namespace, functionName, serializedPayload];
     } else {
         jsFunctionCall = [NSString stringWithFormat:@"window.peak.callJS('%@', '%@');", namespace, functionName];
     }
@@ -234,7 +234,7 @@
 
 - (id)serializePayload:(id)payload {
 
-    if ([[payload class] isKindOfClass:[NSArray class]] || [[payload class] isKindOfClass:[NSDictionary class]]) {
+    if ([payload isKindOfClass:[NSArray class]] || [payload isKindOfClass:[NSDictionary class]]) {
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:payload
                                                            options:0
@@ -248,7 +248,7 @@
         }
     } else {
 
-        if ([[payload class] isKindOfClass:[NSString class]]) {
+        if ([payload isKindOfClass:[NSString class]]) {
             return [NSString stringWithFormat:@"'%@'", payload];
         }
         return payload;
