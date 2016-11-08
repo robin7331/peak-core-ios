@@ -18,27 +18,43 @@
     PeakCoreOnReadyCallback _onReadyCallback;
 }
 
-- (instancetype)init {
+- (void)basicInit {
+    _namespace = @"peakCore";
+    _name = @"peak-core-ios";
+    _version = @"0.1.8";
+    _modules = [@{} mutableCopy];
+    _loadingMode = PeakCoreLoadingModeBundle;
+
+    WKUserContentController *contentController = [[WKUserContentController alloc] init];
+    [contentController addScriptMessageHandler:self name:@"PeakCore"];
+
+    WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+    configuration.userContentController = contentController;
+
+    _webViewConfiguration = configuration;
+}
+
+- (instancetype)initForLogicModule {
     self = [super init];
     if (self) {
-        _namespace = @"peakCore";
-        _name = @"peak-core-ios";
-        _version = @"0.1.8";
-        _modules = [@{} mutableCopy];
+        [self basicInit];
 
-        WKUserContentController *contentController = [[WKUserContentController alloc] init];
-        [contentController addScriptMessageHandler:self name:@"PeakCore"];
-
-        WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
-        configuration.userContentController = contentController;
-
-        _webViewConfiguration = configuration;
+        self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:self.webViewConfiguration];
     }
 
     return self;
 }
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [self basicInit];
+    }
+    return self;
+}
+
 - (void)loadPeakComponentWithName:(NSString *)name {
+    _onReadyCallback = nil;
     [self loadPeakComponentWithName:name withCompletion:nil];
 }
 
@@ -51,23 +67,23 @@
 
     _onReadyCallback = callback;
 
+#ifdef DEBUG
+    if (self.loadingMode == PeakCoreLoadingModeLocalIP) {
+        NSString *completeURL = [self.localDevelopmentIPAdress stringByAppendingPathComponent:name];
+        [self.webView loadRequest:[NSURLRequest requestWithURL:[[NSURL alloc] initWithString:completeURL]]];
+        return;
+    }
+#endif
+
     NSString *dirName = [NSString stringWithFormat:@"peak-components/%@", name];
     NSString *absoluteDirName = [NSString stringWithFormat:@"/peak-components/%@", name];
 
     NSURL *path = [[NSBundle mainBundle] URLForResource:@"index" withExtension:@"html" subdirectory:dirName];
-
+    if (path == nil) {
+        @throw [NSException exceptionWithName:@"Component not found" reason:@"Did you run gulp deploy? Did you include the folder 'peak-components' in your project?" userInfo:nil];
+    }
     NSURL *url = [NSURL fileURLWithPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:absoluteDirName] isDirectory:YES];
     [self.webView loadFileURL:path allowingReadAccessToURL:url];
-}
-
-
-- (void)loadPeakComponentWithURL:(NSURL *)url {
-    [self loadPeakComponentWithURL:url withCompletion:nil];
-}
-
-- (void)loadPeakComponentWithURL:(NSURL *)url withCompletion:(PeakCoreOnReadyCallback)callback {
-    _onReadyCallback = callback;
-    [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
 

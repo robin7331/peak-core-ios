@@ -25,19 +25,19 @@
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
 
-    PeakCore *core = [[PeakCore alloc] init];
-    self.webView = [self.peakWebView generateWKWebViewWithPeakCore:core];
+    PeakCore *core = [[PeakCore alloc] initForLogicModule];
+    core.localDevelopmentIPAdress = @"http://192.168.188.22:3000";
+    core.loadingMode = PeakCoreLoadingModeLocalIP;
+
+//    self.webView = [self.peakWebView generateWKWebViewWithPeakCore:core];
 
     self.userland = [core useModule:[PeakUserland class]];
     self.userland.target = self;
 
-    self.webView.hidden = YES;
-//    [core loadPeakComponentWithName:@"visual-alerts" withCompletion:^{
-//        self.webView.hidden = NO;
-//    }];
-
-    [core loadPeakComponentWithURL:[NSURL URLWithString:@"http://192.168.188.22:3000/visual-alerts/"] withCompletion:^{
-        self.webView.hidden = NO;
+    [core loadPeakComponentWithName:@"sample-logic-module" withCompletion:^{
+        [self.userland callJSFunctionName:@"sort" withPayload:@[@(1), @(5), @(3)] andCallback:^(id callbackPayload) {
+            NSLog(@"Callback: %@", callbackPayload);
+        }];
     }];
 
 }

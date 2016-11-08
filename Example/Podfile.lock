@@ -1,5 +1,5 @@
 PODS:
-  - peak-core-ios (0.1.2)
+  - peak-core-ios (0.1.8)
 
 DEPENDENCIES:
   - peak-core-ios (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  peak-core-ios: a45f173392574a69ec50466c515698f8340e392e
+  peak-core-ios: 89ecce68985a95092c3d6904adc1a4ce6dd2eb3b
 
 PODFILE CHECKSUM: 38c4ec3fb6248f7c58bd78dbab4203500437a385
 

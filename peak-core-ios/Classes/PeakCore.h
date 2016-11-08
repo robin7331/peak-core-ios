@@ -11,6 +11,11 @@
 
 @class PeakModule;
 
+typedef NS_ENUM(NSInteger, PeakCoreLoadingMode) {
+    PeakCoreLoadingModeBundle,
+    PeakCoreLoadingModeLocalIP
+};
+
 typedef void (^PeakCoreCallback)(id callbackPayload);
 typedef void (^PeakCoreOnReadyCallback)(void);
 
@@ -20,13 +25,14 @@ typedef void (^PeakCoreOnReadyCallback)(void);
 @property (nonatomic, readonly) WKWebViewConfiguration *webViewConfiguration;
 @property (readonly) NSString *componentName;
 @property NSMutableDictionary <NSString *, PeakModule *> *modules;
+@property NSString *localDevelopmentIPAdress;
+@property PeakCoreLoadingMode loadingMode;
 
+
+- (instancetype)initForLogicModule;
 
 - (void)loadPeakComponentWithName:(NSString *)name;
 - (void)loadPeakComponentWithName:(NSString *)name withCompletion:(PeakCoreOnReadyCallback)callback;
-
-- (void)loadPeakComponentWithURL:(NSURL *)url;
-- (void)loadPeakComponentWithURL:(NSURL *)url withCompletion:(PeakCoreOnReadyCallback)callback;
 
 - (id)useModule:(Class)moduleClass;
 
