@@ -17,6 +17,7 @@
 @property WKWebView *webView;
 @property PeakUserland *userland;
 @property IBOutlet PeakWebViewContainer *peakWebView;
+@property PeakCore *core;
 @end
 
 @implementation PeakViewController
@@ -25,58 +26,43 @@
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
 
-    PeakCore *core = [[PeakCore alloc] initForLogicModule];
-    core.localDevelopmentIPAdress = @"http://192.168.188.22:3000";
-    core.loadingMode = PeakCoreLoadingModeLocalIP;
+    self.core = [[PeakCore alloc] initForLogicModule];
+    self.core.localDevelopmentIPAdress = @"http://192.168.188.22:3002";
+    self.core.loadingMode = PeakCoreLoadingModeLocalIP;
 
 //    self.webView = [self.peakWebView generateWKWebViewWithPeakCore:core];
 
-    self.userland = [core useModule:[PeakUserland class]];
+    self.userland = [self.core useModule:[PeakUserland class]];
     self.userland.target = self;
 
-    [core loadPeakComponentWithName:@"sample-logic-module" withCompletion:^{
-        [self.userland callJSFunctionName:@"sort" withPayload:@[@(1), @(5), @(3)] andCallback:^(id callbackPayload) {
-            NSLog(@"Callback: %@", callbackPayload);
-        }];
+    [self.core loadPeakComponentWithName:@"sample-logic-module" withCompletion:^{
+//        [self.userland callJSFunctionName:@"sort" withPayload:@[@(1), @(5), @(3)] andCallback:^(id callbackPayload) {
+//            NSLog(@"Callback: %@", callbackPayload);
+//        }];
     }];
 
 }
 
-- (IBAction)reloadWebView:(id)sender {
-
-    //    [self.webView evaluateJavaScript:@"Vue.NativeInterface.callJS('helloWorld');" completionHandler:nil];
-
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://localhost:8080/"]]];
-}
-
-- (void)openURL:(NSString *)url {
-    [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:url]];
-}
 
 
-- (IBAction)clear:(id)sender {
 
-    [self.userland callJSFunctionName:@"clear"];
+- (IBAction)reloadComponent:(id)sender {
 
-}
+    [self.core loadPeakComponentWithName:@"sample-logic-module" withCompletion:^{
+//        [self.userland callJSFunctionName:@"sort" withPayload:@[@(1), @(5), @(3)] andCallback:^(id callbackPayload) {
+//            NSLog(@"Callback: %@", callbackPayload);
+//        }];
 
-- (IBAction)getCurrentResult:(id)sender {
+//        [self.core set:@"Hallo" forKey:@"MyKey"];
+        NSLog(@"Value: %@", [self.core getValueForKey:@"MyKey"]);
 
-    [self.userland callJSFunctionName:@"getCurrentResult" withCallback:^(id callbackPayload) {
-        NSLog(@"Current Result: %@", callbackPayload);
     }];
 
+//    [self.userland callJSFunctionName:@"clear"];
+
 }
 
--(void)storeResult:(NSNumber *)result {
-    [[NSUserDefaults standardUserDefaults] setObject:result forKey:@"result"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
 
-- (void)getLastResultWithCallback:(PeakCoreCallback)callback {
-    NSNumber *result = [[NSUserDefaults standardUserDefaults] objectForKey:@"result"];
-    callback(result);
-}
 
 
 - (void)didReceiveMemoryWarning {

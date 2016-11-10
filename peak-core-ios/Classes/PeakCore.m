@@ -7,11 +7,13 @@
 #import "MethodDefinition.h"
 #import "NativeCall.h"
 #import "PeakModule.h"
+#import "PeakSharedStore.h"
 
 @interface PeakCore () <WKScriptMessageHandler>
 @property NSString *namespace;
 @property NSString *name;
 @property NSString *version;
+@property PeakSharedStore *store;
 @end
 
 @implementation PeakCore {
@@ -32,6 +34,8 @@
     configuration.userContentController = contentController;
 
     _webViewConfiguration = configuration;
+
+    self.store = [PeakSharedStore instance];
 }
 
 - (instancetype)initForLogicModule {
@@ -295,10 +299,30 @@
 //    [[NSException exceptionWithName:message reason:@"" userInfo:nil] raise];
 }
 
+- (void)set:(NSString *)value forKey:(NSString *)key {
+    NSDictionary *payload = @{ @"key": key, @"value": value};
+
+    [self.store setSharedValue:payload];
+    [self callJSFunctionName:@"setSharedValue" inNamespace:@"peakCore" withPayload:payload];
+
+}
+
+- (NSString *)getValueForKey:(NSString *)key {
+    return [self.store getSharedValue:key];
+}
+
+- (void)setSharedValue:(NSDictionary *)data {
+    [self.store setSharedValue:data];
+}
+
+
 - (void)onReady {
     if (_onReadyCallback) {
+        [self log:@"onReady() called" withTag:[self loggingTag]];
         _onReadyCallback();
         _onReadyCallback = nil;
+    } else {
+        [self log:@"onReady() called but no callback was defined" withTag:[self loggingTag]];
     }
 }
 

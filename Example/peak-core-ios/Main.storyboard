@@ -30,7 +30,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="baN-8Z-lgI">
-                        <barButtonItem key="leftBarButtonItem" title="Clear" id="UwV-bi-ahf"/>
+                        <barButtonItem key="leftBarButtonItem" title="Reload Component" id="UwV-bi-ahf">
+                            <connections>
+                                <action selector="reloadComponent:" destination="whP-gf-Uak" id="o8L-PU-xN8"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Get current result" id="RBu-Uc-Szl"/>
                     </navigationItem>
                     <connections>
@@ -46,7 +50,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gWT-cP-CzG" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="FNE-Ke-LkP">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="FNE-Ke-LkP">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
