@@ -43,6 +43,8 @@
     if (self) {
         [self basicInit];
         self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:self.webViewConfiguration];
+        [[UIApplication sharedApplication].keyWindow addSubview:self.webView];
+        self.webView.hidden = YES;
     }
 
     return self;
@@ -72,7 +74,7 @@
 
 #ifdef DEBUG
     if (self.loadingMode == PeakCoreLoadingModeLocalIP) {
-        NSString *completeURL = [self.localDevelopmentIPAdress stringByAppendingPathComponent:name];
+        NSString *completeURL = [self.localDevelopmentIPAdress stringByAppendingString:name];
         [self.webView loadRequest:[NSURLRequest requestWithURL:[[NSURL alloc] initWithString:completeURL]]];
         return;
     }
@@ -248,17 +250,18 @@
 
 - (PeakCoreCallback)generateCallbackForCall:(NativeCall *)call {
 
-    __weak PeakCore *weakSelf = self;
-    __weak NSString *weakCallbackKey = call.callbackKey;
+    __block PeakCore *weakSelf = self;
+    __block NSString *weakCallbackKey = call.callbackKey;
 
     PeakCoreCallback callback = ^(id callbackPayload) {
-        PeakCore *innerSelf = weakSelf;
-        NSString *innerCallbackKey = weakCallbackKey;
 
-        id serializedPayload = [innerSelf serializePayload:callbackPayload];
+        id serializedPayload = [weakSelf serializePayload:callbackPayload];
 
-        NSString *callbackCall = [NSString stringWithFormat:@"window.peak.callCallback('%@', %@);", innerCallbackKey, serializedPayload];
-        [innerSelf.webView evaluateJavaScript:callbackCall completionHandler:nil];
+        NSString *callbackCall = [NSString stringWithFormat:@"window.peak.callCallback('%@', %@);", weakCallbackKey, serializedPayload];
+        [weakSelf.webView evaluateJavaScript:callbackCall completionHandler:nil];
+
+        weakSelf = nil;
+        weakCallbackKey = nil;
     };
 
     return callback;
