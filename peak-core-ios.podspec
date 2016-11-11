@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'peak-core-ios'
-  s.version          = '0.2.0'
+  s.version          = '0.2.1'
   s.summary          = 'PEAK Core iOS Library'
 
 # This description is used to generate tags and improve search results.
@@ -38,5 +38,5 @@ TODO: Add long description of the pod here.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
    s.frameworks = 'UIKit', 'WebKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+   s.dependency 'UICKeyChainStore', '~> 2.1.0'
 end

@@ -37,6 +37,9 @@ typedef void (^PeakCoreOnReadyCallback)(void);
 - (id)useModule:(Class)moduleClass;
 
 - (void)set:(NSString *)value forKey:(NSString *)key;
+- (void)setPersistent:(NSString *)value forKey:(NSString *)key;
+- (void)setPersistentSecure:(NSString *)value forKey:(NSString *)key;
+
 - (NSString *)getValueForKey:(NSString *)key;
 
 - (void)callJSFunctionName:(NSString *)functionName inNamespace:(NSString *)namespace;

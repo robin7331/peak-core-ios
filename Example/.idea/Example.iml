@@ -20,6 +20,12 @@
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-acknowledgements.markdown" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests-umbrella.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Tests/Pods-peak-core-ios_Tests.debug.xcconfig" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/UICKeyChainStore/UICKeyChainStore-dummy.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/UICKeyChainStore/UICKeyChainStore-prefix.pch" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/UICKeyChainStore/UICKeyChainStore.xcconfig" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/UICKeyChainStore/Info.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/UICKeyChainStore/UICKeyChainStore-umbrella.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/UICKeyChainStore/UICKeyChainStore.modulemap" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-acknowledgements.markdown" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-dummy.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-umbrella.h" isTestSource="false" />
@@ -30,41 +36,48 @@
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-frameworks.sh" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Info.plist" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pods/Target Support Files/Pods-peak-core-ios_Example/Pods-peak-core-ios_Example-resources.sh" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/UICKeyChainStore/Lib/UICKeyChainStore/UICKeyChainStore.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Pods/UICKeyChainStore/Lib/UICKeyChainStore/UICKeyChainStore.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/PeakViewController.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/en.lproj/InfoPlist.strings" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/PeakAppDelegate.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/Main.storyboard" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/PeakAppDelegate.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/main.m" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/Images.xcassets" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/PeakAppDelegate.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/PeakViewController.m" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/peak-core-ios-Prefix.pch" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/peak-core-ios-Info.plist" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Tests/Tests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/Images.xcassets" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/main.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/PeakAppDelegate.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/en.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/peak-core-ios/peak-core-ios-Prefix.pch" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Tests/Tests-Prefix.pch" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Tests/Tests-Info.plist" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Tests/en.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Tests/Tests-Info.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Tests/Tests.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Podfile" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../LICENSE" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakCore.m" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakSharedStore.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakModule.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakWebViewContainer.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakUserland.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/Models/MethodDefinition.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/Models/MethodDefinition.m" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/Models/NativeCall.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/Models/NativeCall.m" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakSharedStore.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakCore.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakWebViewContainer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakUserland.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakCore.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakSharedStore.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakModule.m" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakModule.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../peak-core-ios/Classes/PeakSharedStore.m" isTestSource="false" />
     </content>
+    <content url="file://$USER_HOME$/Library/Caches/AppCode2016.2/DerivedData/peak-core-ios-aktrejkolwrqsabdzpqfxxwpxxcw/Build/Intermediates/Pods.build/Debug-iphoneos/Pods-peak-core-ios_Example.build/DerivedSources" />
+    <content url="file://$USER_HOME$/Library/Caches/AppCode2016.2/DerivedData/peak-core-ios-aktrejkolwrqsabdzpqfxxwpxxcw/Build/Intermediates/Pods.build/Debug-iphoneos/UICKeyChainStore.build/DerivedSources" />
+    <content url="file://$USER_HOME$/Library/Caches/AppCode2016.2/DerivedData/peak-core-ios-aktrejkolwrqsabdzpqfxxwpxxcw/Build/Intermediates/Pods.build/Debug-iphoneos/peak-core-ios.build/DerivedSources" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="Header Search Paths">
         <CLASSES>
+          <root url="file://$USER_HOME$/Library/Caches/AppCode2016.2/DerivedData/peak-core-ios-aktrejkolwrqsabdzpqfxxwpxxcw/Build/Products/Debug-iphoneos/UICKeyChainStore/UICKeyChainStore.framework/Headers" />
+          <root url="file://$USER_HOME$/Library/Caches/AppCode2016.2/DerivedData/peak-core-ios-aktrejkolwrqsabdzpqfxxwpxxcw/Build/Products/Debug-iphoneos/peak-core-ios/peak_core_ios.framework/Headers" />
           <root url="file:///Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Frameworks/XcodeKit.framework/Headers" />
           <root url="file:///Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Frameworks/InterfaceBuilderKit.framework/Headers" />
           <root url="file:///Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Frameworks/DTPerformanceSession.framework/Headers" />
@@ -166,6 +179,8 @@
           <root url="file:///Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1" />
         </CLASSES>
         <SOURCES>
+          <root url="file://$USER_HOME$/Library/Caches/AppCode2016.2/DerivedData/peak-core-ios-aktrejkolwrqsabdzpqfxxwpxxcw/Build/Products/Debug-iphoneos/UICKeyChainStore/UICKeyChainStore.framework/Headers" />
+          <root url="file://$USER_HOME$/Library/Caches/AppCode2016.2/DerivedData/peak-core-ios-aktrejkolwrqsabdzpqfxxwpxxcw/Build/Products/Debug-iphoneos/peak-core-ios/peak_core_ios.framework/Headers" />
           <root url="file:///Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Frameworks/XcodeKit.framework/Headers" />
           <root url="file:///Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Frameworks/InterfaceBuilderKit.framework/Headers" />
           <root url="file:///Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Frameworks/DTPerformanceSession.framework/Headers" />

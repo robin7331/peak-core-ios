@@ -8,8 +8,10 @@
 @interface PeakSharedStore : NSObject
 + (PeakSharedStore *)instance;
 
+- (NSDictionary *)getStore;
 - (void)setSharedValue:(NSDictionary *)data;
 - (NSString *)getSharedValue:(NSString *)key;
+- (void)setSharedPersistentValue:(NSDictionary *)dictionary;
 
 
 @end

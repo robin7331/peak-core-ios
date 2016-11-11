@@ -42,7 +42,6 @@
     self = [super init];
     if (self) {
         [self basicInit];
-
         self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:self.webViewConfiguration];
     }
 
@@ -62,7 +61,7 @@
     [self loadPeakComponentWithName:name withCompletion:nil];
 }
 
-- (void)loadPeakComponentWithName:(NSString *)name withCompletion:(PeakCoreOnReadyCallback)callback  {
+- (void)loadPeakComponentWithName:(NSString *)name withCompletion:(PeakCoreOnReadyCallback)callback {
 
     if (self.webView == nil) {
         [self logError:@"PeakCore has no WKWebView. Cannot load Peak Component"];
@@ -98,7 +97,7 @@
     NSAssert(moduleClass != [PeakModule class], @"You cannot add the PeakModule Class as a new module. Create a subclass instead!");
 
     BOOL found = NO;
-    for( PeakModule *m in self.modules) {
+    for (PeakModule *m in self.modules) {
         if ([m.class isKindOfClass:moduleClass]) {
             found = YES;
             NSLog(@"PeakModule '%@' already installed!", m.name);
@@ -107,7 +106,7 @@
     }
 
     id module = [[moduleClass alloc] performSelector:NSSelectorFromString(@"initWithPeakCoreInstance:") withObject:self];
-    PeakModule *m = (PeakModule *)module;
+    PeakModule *m = (PeakModule *) module;
     [m onBeforeInstallation];
 
     self.modules[m.namespace] = module;
@@ -125,29 +124,35 @@
 
     if ([message.name isEqualToString:@"PeakCore"]) {
 
-        NativeCall *nativeCall = [NativeCall callWithMessage:message];
-        // if this call is for the peakCore namespace (this class)
-        if ([nativeCall.methodDefinition.namespace isEqualToString:self.namespace]) {
-            [self handleNativeCall:nativeCall onTarget:self];
-            return;
-        } else {
-            PeakModule *module = self.modules[nativeCall.methodDefinition.namespace];
-            if (module) {
-                id target = [module targetForNativeCall];
-                [self handleNativeCall:nativeCall onTarget:target];
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+            NativeCall *nativeCall = [NativeCall callWithMessage:message];
+            // if this call is for the peakCore namespace (this class)
+            if ([nativeCall.methodDefinition.namespace isEqualToString:self.namespace]) {
+                [self handleNativeCall:nativeCall onTarget:self];
+                return;
             } else {
-                NSString *msg = [NSString stringWithFormat:@"Module with namespace <%@> not installed!", nativeCall.methodDefinition.namespace];
-                [self logError:msg withTag:[self loggingTag]];
+                PeakModule *module = self.modules[nativeCall.methodDefinition.namespace];
+                if (module) {
+                    id target = [module targetForNativeCall];
+                    [self handleNativeCall:nativeCall onTarget:target];
+                } else {
+                    NSString *msg = [NSString stringWithFormat:@"Module with namespace <%@> not installed!", nativeCall.methodDefinition.namespace];
+                    [self logError:msg withTag:[self loggingTag]];
+                }
             }
-        }
+
+        });
+
+
     }
 }
+
 
 
 - (void)callJSFunctionName:(NSString *)functionName inNamespace:(NSString *)namespace {
     [self callJSFunctionName:functionName inNamespace:namespace withPayload:nil andCallback:nil];
 }
-
 
 
 - (void)callJSFunctionName:(NSString *)functionName inNamespace:(NSString *)namespace withPayload:(id)payload {
@@ -221,13 +226,15 @@
         id payload = call.payload;
         [invocation setArgument:&payload atIndex:2];
     } else if (!hasPayload && hasCallback) {
-        PeakCoreCallback callback = [self generateCallbackForCall:call];
+        PeakCoreCallback callback = [[self generateCallbackForCall:call] copy];
         [invocation setArgument:&callback atIndex:2];
+        [invocation retainArguments];
     } else if (hasPayload && hasCallback) {
         id payload = call.payload;
         [invocation setArgument:&payload atIndex:2];
         PeakCoreCallback callback = [self generateCallbackForCall:call];
         [invocation setArgument:&callback atIndex:3];
+        [invocation retainArguments];
     }
 
     [invocation setTarget:target];
@@ -240,13 +247,18 @@
 }
 
 - (PeakCoreCallback)generateCallbackForCall:(NativeCall *)call {
-    PeakCore *weakSelf = self;
-    NSString *weakCallbackKey = call.callbackKey;
-    PeakCoreCallback callback = ^(id callbackPayload) {
-        id serializedPayload = [weakSelf serializePayload:callbackPayload];
 
-        NSString *callbackCall = [NSString stringWithFormat:@"window.peak.callCallback('%@', %@);", weakCallbackKey, serializedPayload];
-        [weakSelf.webView evaluateJavaScript:callbackCall completionHandler:nil];
+    __weak PeakCore *weakSelf = self;
+    __weak NSString *weakCallbackKey = call.callbackKey;
+
+    PeakCoreCallback callback = ^(id callbackPayload) {
+        PeakCore *innerSelf = weakSelf;
+        NSString *innerCallbackKey = weakCallbackKey;
+
+        id serializedPayload = [innerSelf serializePayload:callbackPayload];
+
+        NSString *callbackCall = [NSString stringWithFormat:@"window.peak.callCallback('%@', %@);", innerCallbackKey, serializedPayload];
+        [innerSelf.webView evaluateJavaScript:callbackCall completionHandler:nil];
     };
 
     return callback;
@@ -278,11 +290,11 @@
 }
 
 
--(NSString *)loggingTag {
+- (NSString *)loggingTag {
     return [NSString stringWithFormat:@"%@ (%@)", self.name, self.version];
 }
 
--(void)log:(id)message withTag:(NSString *)tag {
+- (void)log:(id)message withTag:(NSString *)tag {
     [self log:[tag stringByAppendingFormat:@" %@", message]];
 }
 
@@ -290,7 +302,7 @@
     NSLog(message);
 }
 
--(void)logError:(id)message withTag:(NSString *)tag {
+- (void)logError:(id)message withTag:(NSString *)tag {
     [self logError:[tag stringByAppendingFormat:@" %@", message]];
 }
 
@@ -299,10 +311,42 @@
 //    [[NSException exceptionWithName:message reason:@"" userInfo:nil] raise];
 }
 
+- (void)debugLog:(id)message {
+    [self log:message withTag:[self loggingTag]];
+}
+
+- (void)debugError:(id)message {
+    [self logError:message withTag:[self loggingTag]];
+}
+
 - (void)set:(NSString *)value forKey:(NSString *)key {
-    NSDictionary *payload = @{ @"key": key, @"value": value};
+    NSDictionary *payload = @{@"key": key, @"value": value};
 
     [self.store setSharedValue:payload];
+    [self callJSFunctionName:@"setSharedValue" inNamespace:@"peakCore" withPayload:payload];
+
+}
+
+- (void)setPersistent:(NSString *)value forKey:(NSString *)key {
+    NSDictionary *payload = @{
+            @"key": key,
+            @"value": value,
+            @"secure": @(false)
+    };
+
+    [self.store setSharedPersistentValue:payload];
+    [self callJSFunctionName:@"setSharedValue" inNamespace:@"peakCore" withPayload:payload];
+
+}
+
+- (void)setPersistentSecure:(NSString *)value forKey:(NSString *)key {
+    NSDictionary *payload = @{
+            @"key": key,
+            @"value": value,
+            @"secure": @(true)
+    };
+
+    [self.store setSharedPersistentValue:payload];
     [self callJSFunctionName:@"setSharedValue" inNamespace:@"peakCore" withPayload:payload];
 
 }
@@ -313,6 +357,17 @@
 
 - (void)setSharedValue:(NSDictionary *)data {
     [self.store setSharedValue:data];
+}
+
+- (void)setSharedPersistentValue:(NSDictionary *)data {
+    [self.store setSharedPersistentValue:data];
+}
+
+- (void)getSharedStoreWithCallback:(PeakCoreCallback)callback {
+    NSLog(@"getSharedStore called");
+    callback(@{
+            @"store": [self.store getStore]
+    });
 }
 
 

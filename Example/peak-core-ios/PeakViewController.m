@@ -27,7 +27,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     self.core = [[PeakCore alloc] initForLogicModule];
-    self.core.localDevelopmentIPAdress = @"http://192.168.188.22:3002";
+    self.core.localDevelopmentIPAdress = @"http://192.168.188.22:3000";
     self.core.loadingMode = PeakCoreLoadingModeLocalIP;
 
 //    self.webView = [self.peakWebView generateWKWebViewWithPeakCore:core];
@@ -44,8 +44,6 @@
 }
 
 
-
-
 - (IBAction)reloadComponent:(id)sender {
 
     [self.core loadPeakComponentWithName:@"sample-logic-module" withCompletion:^{
@@ -54,7 +52,11 @@
 //        }];
 
 //        [self.core set:@"Hallo" forKey:@"MyKey"];
-        NSLog(@"Value: %@", [self.core getValueForKey:@"MyKey"]);
+
+
+
+        NSLog(@"Secure Value: %@", [self.core getValueForKey:@"secure-token"]);
+        NSLog(@"Standard Value: %@", [self.core getValueForKey:@"some-persistent-value-2"]);
 
     }];
 
