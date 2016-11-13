@@ -27,8 +27,9 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     self.core = [[PeakCore alloc] initForLogicModule];
-    self.core.localDevelopmentIPAdress = @"http://192.168.188.22:3000/";
+    self.core.localDevelopmentIPAdress = @"http://192.168.188.22:3002/";
     self.core.loadingMode = PeakCoreLoadingModeLocalIP;
+    self.core.debug = YES;
 
 //    self.webView = [self.peakWebView generateWKWebViewWithPeakCore:core];
 
@@ -57,7 +58,7 @@
 
 //        [self.core set:@"Hallo" forKey:@"MyKey"];
 
-
+        [self.userland callJSFunctionName:@"debugModeTest"];
 //
 //        NSLog(@"Secure Value: %@", [self.core getValueForKey:@"secure-token"]);
 //        NSLog(@"Standard Value: %@", [self.core getValueForKey:@"some-persistent-value-2"]);

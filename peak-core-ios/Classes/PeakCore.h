@@ -27,6 +27,7 @@ typedef void (^PeakCoreOnReadyCallback)(void);
 @property NSMutableDictionary <NSString *, PeakModule *> *modules;
 @property NSString *localDevelopmentIPAdress;
 @property PeakCoreLoadingMode loadingMode;
+@property BOOL debug;
 
 
 - (instancetype)initForLogicModule;
@@ -41,6 +42,9 @@ typedef void (^PeakCoreOnReadyCallback)(void);
 - (void)setPersistentSecure:(NSString *)value forKey:(NSString *)key;
 
 - (NSString *)getValueForKey:(NSString *)key;
+
+- (void)debugLog:(NSString *)message withTag:(NSString *)tag;
+- (void)debugError:(NSString *)message withTag:(NSString *)tag;
 
 - (void)callJSFunctionName:(NSString *)functionName inNamespace:(NSString *)namespace;
 - (void)callJSFunctionName:(NSString *)functionName inNamespace:(NSString *)namespace withPayload:(id)payload;

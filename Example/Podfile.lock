@@ -1,5 +1,5 @@
 PODS:
-  - peak-core-ios (0.2.0):
+  - peak-core-ios (0.2.2):
     - UICKeyChainStore (~> 2.1.0)
   - UICKeyChainStore (2.1.0)
 
@@ -11,7 +11,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  peak-core-ios: 85f74bfac2b804d6cfd3369bb6a3ac0ef7df4ee0
+  peak-core-ios: ecf5d8809319e764993b65ab4ee384da7bc37fb1
   UICKeyChainStore: f1cbd42216a113f0165de1e733e62905b8823432
 
 PODFILE CHECKSUM: 38c4ec3fb6248f7c58bd78dbab4203500437a385

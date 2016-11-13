@@ -26,6 +26,7 @@
     _version = @"0.1.8";
     _modules = [@{} mutableCopy];
     _loadingMode = PeakCoreLoadingModeBundle;
+    _debug = NO;
 
     WKUserContentController *contentController = [[WKUserContentController alloc] init];
     [contentController addScriptMessageHandler:self name:@"PeakCore"];
@@ -72,13 +73,12 @@
 
     _onReadyCallback = callback;
 
-#ifdef DEBUG
-    if (self.loadingMode == PeakCoreLoadingModeLocalIP) {
+    if (self.loadingMode == PeakCoreLoadingModeLocalIP && self.debug) {
         NSString *completeURL = [self.localDevelopmentIPAdress stringByAppendingString:name];
+        [self debugLog:@"Loading remote component from %@", completeURL];
         [self.webView loadRequest:[NSURLRequest requestWithURL:[[NSURL alloc] initWithString:completeURL]]];
         return;
     }
-#endif
 
     NSString *dirName = [NSString stringWithFormat:@"peak-components/%@", name];
     NSString *absoluteDirName = [NSString stringWithFormat:@"/peak-components/%@", name];
@@ -88,6 +88,7 @@
         @throw [NSException exceptionWithName:@"Component not found" reason:@"Did you run gulp deploy? Did you include the folder 'peak-components' in your project?" userInfo:nil];
     }
     NSURL *url = [NSURL fileURLWithPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:absoluteDirName] isDirectory:YES];
+    [self debugLog:@"Loading bundle component from %@", dirName];
     [self.webView loadFileURL:path allowingReadAccessToURL:url];
 }
 
@@ -102,7 +103,7 @@
     for (PeakModule *m in self.modules) {
         if ([m.class isKindOfClass:moduleClass]) {
             found = YES;
-            NSLog(@"PeakModule '%@' already installed!", m.name);
+            [self debugLog:@"PeakModule '%@' already installed!", m.name];
             return m;
         }
     }
@@ -139,8 +140,7 @@
                     id target = [module targetForNativeCall];
                     [self handleNativeCall:nativeCall onTarget:target];
                 } else {
-                    NSString *msg = [NSString stringWithFormat:@"Module with namespace <%@> not installed!", nativeCall.methodDefinition.namespace];
-                    [self logError:msg withTag:[self loggingTag]];
+                    [self debugError:@"Module with namespace <%@> not installed!", nativeCall.methodDefinition.namespace];
                 }
             }
 
@@ -168,13 +168,12 @@
 - (void)callJSFunctionName:(NSString *)functionName inNamespace:(NSString *)namespace withPayload:(id)payload andCallback:(PeakCoreCallback)callback {
 
     if (functionName == nil || functionName.length == 0) {
-        [self log:@"Cannot call a JS function without a function name!" withTag:self.name];
+        [self debugLog:@"Cannot call a JS function without a function name!"];
         return;
     }
 
     if (namespace == nil || namespace.length == 0) {
-        NSString *msg = [NSString stringWithFormat:@"Cannot call '%@' without a namespace!", functionName];
-        [self log:msg withTag:self.name];
+        [self debugLog:@"Cannot call '%@' without a namespace!", functionName];
         return;
     }
 
@@ -217,8 +216,7 @@
     NSMethodSignature *methodSignature = [target methodSignatureForSelector:NSSelectorFromString(selectorString)];
 
     if (methodSignature == nil) {
-        NSString *msg = [NSString stringWithFormat:@"<%@> class has no method '%@' defined!", [target class], selectorString];
-        [self log:msg withTag:self.name];
+        [self debugLog:@"<%@> class has no method '%@' defined!", [target class], selectorString];
         return;
     }
 
@@ -293,34 +291,6 @@
 }
 
 
-- (NSString *)loggingTag {
-    return [NSString stringWithFormat:@"%@ (%@)", self.name, self.version];
-}
-
-- (void)log:(id)message withTag:(NSString *)tag {
-    [self log:[tag stringByAppendingFormat:@" %@", message]];
-}
-
-- (void)log:(id)message {
-    NSLog(message);
-}
-
-- (void)logError:(id)message withTag:(NSString *)tag {
-    [self logError:[tag stringByAppendingFormat:@" %@", message]];
-}
-
-- (void)logError:(id)message {
-    NSLog(message);
-//    [[NSException exceptionWithName:message reason:@"" userInfo:nil] raise];
-}
-
-- (void)debugLog:(id)message {
-    [self log:message withTag:[self loggingTag]];
-}
-
-- (void)debugError:(id)message {
-    [self logError:message withTag:[self loggingTag]];
-}
 
 - (void)set:(NSString *)value forKey:(NSString *)key {
     NSDictionary *payload = @{@"key": key, @"value": value};
@@ -367,21 +337,105 @@
 }
 
 - (void)getSharedStoreWithCallback:(PeakCoreCallback)callback {
-    NSLog(@"getSharedStore called");
-    callback(@{
-            @"store": [self.store getStore]
-    });
+    callback([self.store getStore]);
 }
 
 
 - (void)onReady {
+    [self callJSFunctionName:@"enableDebug" inNamespace:@"peakCore" withPayload:@(self.debug)];
     if (_onReadyCallback) {
-        [self log:@"onReady() called" withTag:[self loggingTag]];
+        [self debugLog:@"onReady() called"];
         _onReadyCallback();
-        _onReadyCallback = nil;
     } else {
-        [self log:@"onReady() called but no callback was defined" withTag:[self loggingTag]];
+        [self debugLog:@"onReady() called but no callback was defined"];
     }
+}
+
+#pragma mark - Logging
+
+/**
+ * Convenient logging method. Use this within PeakCore only! (use debugLog:withTag: for userland or custom module logging)
+ * Messages will not be forwarded to console when self.debug == NO
+ * @param message
+ * @param tag
+ */
+- (void)debugLog:(NSString *)formatString, ... {
+    if (self.debug) {
+        va_list args;
+        va_start(args, formatString);
+        [self debugLog:[[NSString alloc] initWithFormat:formatString arguments:args] withTag:[self loggingTag]];
+        va_end(args);
+    }
+}
+
+/**
+ * External logging method. Use this for external classes like PeakUserland or other modules
+ * Messages will not be forwarded to console when self.debug == NO
+ * @param message
+ * @param tag
+ */
+- (void)debugLog:(NSString *)message withTag:(NSString *)tag {
+    [self log:[tag stringByAppendingFormat:@" %@", message]];
+}
+
+/**
+ * Convenient logging method. Use this within PeakCore only! (use debugLog:withTag: for userland or custom module logging)
+ * Messages will not be forwarded to console when self.debug == NO
+ * @param message
+ * @param tag
+ */
+- (void)debugError:(NSString *)formatString, ... {
+    if (self.debug) {
+        va_list args;
+        va_start(args, formatString);
+        [self debugError:[[NSString alloc] initWithFormat:formatString arguments:args] withTag:[self loggingTag]];
+        va_end(args);
+    }
+}
+
+/**
+ * External logging method. Use this for external classes like PeakUserland or other modules
+ * Messages will not be forwarded to console when self.debug == NO
+ * @param message
+ * @param tag
+ */
+- (void)debugError:(NSString *)message withTag:(NSString *)tag {
+    [self logError:[tag stringByAppendingFormat:@" ERROR -> %@", message]];
+}
+
+
+
+
+
+#pragma mark - Required Native Methods
+
+/**
+ * Logs that are printed by the javascript side
+ * @param message
+ */
+- (void)log:(NSString *)message {
+    NSLog(@"%@", message);
+}
+
+/**
+ * Errors that are printed by the javascript side
+ * @param message
+ */
+- (void)logError:(NSString *)message {
+    NSLog(@"%@", message);
+//    [[NSException exceptionWithName:message reason:@"" userInfo:nil] raise];
+}
+
+
+
+#pragma mark - Helpers
+
+/**
+ * Returns a logging tag for the PeakCore Module. F.ex. 'peak-core-ios (0.1.8)'
+ * @return
+ */
+- (NSString *)loggingTag {
+    return [NSString stringWithFormat:@"%@ (%@)", self.name, self.version];
 }
 
 @end
