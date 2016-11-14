@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, MethodDefinitionPayloadType) {
 @property (readonly) MethodDefinitionPayloadType payloadType;
 @property (readonly) NSDictionary *typeOfPayloadData;
 
++ (MethodDefinition *)definitionWithDictionary:(NSDictionary *)dict;
+- (instancetype)initWithDictionary:(NSDictionary *)dict;
 + (MethodDefinition *)definitionWithMessage:(WKScriptMessage *)message;
 - (instancetype)initWithMessage:(WKScriptMessage *)message;
 @end

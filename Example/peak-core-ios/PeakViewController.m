@@ -27,7 +27,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     self.core = [[PeakCore alloc] initForLogicModule];
-    self.core.localDevelopmentIPAdress = @"http://192.168.188.22:3002/";
+    self.core.localDevelopmentIPAdress = @"http://Robins-MacBook-Pro.local:3000/";
     self.core.loadingMode = PeakCoreLoadingModeLocalIP;
     self.core.debug = YES;
 

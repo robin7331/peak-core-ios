@@ -10,27 +10,33 @@
 @implementation NativeCall {
 
 }
++ (NativeCall *)callWithDictionary:(NSDictionary *)dict {
+    return [[NativeCall alloc] initWithDictionary:dict];
+}
+
+- (instancetype)initWithDictionary:(NSDictionary *)dict {
+    self = [super init];
+    if (self) {
+        _methodDefinition = [MethodDefinition definitionWithDictionary:dict];
+        _payload = dict[@"payload"] ?: nil;
+        _callbackKey = dict[@"callbackKey"] ?: nil;
+    }
+    return self;
+}
+
 + (NativeCall *)callWithMessage:(WKScriptMessage *)message {
     return [[NativeCall alloc] initWithMessage:message];
 }
 
+
 - (instancetype)initWithMessage:(WKScriptMessage *)message {
-    self = [super init];
-    if (self) {
-
-        if (message != nil) {
-            NSDictionary *msg = (NSDictionary *) message.body;
-            if (msg != nil) {
-
-                _methodDefinition = [MethodDefinition definitionWithMessage:message];
-                _payload = msg[@"payload"] ?: nil;
-                _callbackKey = msg[@"callbackKey"] ?: nil;
-
-            }
+    if (message != nil) {
+        NSDictionary *msg = (NSDictionary *) message.body;
+        if (msg != nil) {
+            return [self initWithDictionary:msg];
         }
     }
-
-    return self;
+    return nil;
 }
 
 @end

@@ -14,6 +14,7 @@
 @property NSString *name;
 @property NSString *version;
 @property PeakSharedStore *store;
+@property JSContext *context;
 @end
 
 @implementation PeakCore {
@@ -28,6 +29,10 @@
     _loadingMode = PeakCoreLoadingModeBundle;
     _debug = NO;
 
+    self.store = [PeakSharedStore instance];
+}
+
+- (void)webViewInit {
     WKUserContentController *contentController = [[WKUserContentController alloc] init];
     [contentController addScriptMessageHandler:self name:@"PeakCore"];
 
@@ -35,17 +40,18 @@
     configuration.userContentController = contentController;
 
     _webViewConfiguration = configuration;
-
-    self.store = [PeakSharedStore instance];
 }
 
 - (instancetype)initForLogicModule {
     self = [super init];
     if (self) {
         [self basicInit];
-        self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:self.webViewConfiguration];
-        [[UIApplication sharedApplication].keyWindow addSubview:self.webView];
-        self.webView.hidden = YES;
+
+        self.context = [JSContext new];
+        __weak PeakCore *weakSelf = self;
+        self.context.exceptionHandler = ^(JSContext *context, JSValue *exception) {
+            [weakSelf debugError:@"JSContext Exception: %@", exception.toString];
+        };
     }
 
     return self;
@@ -55,6 +61,7 @@
     self = [super init];
     if (self) {
         [self basicInit];
+        [self webViewInit];
     }
     return self;
 }
@@ -66,32 +73,80 @@
 
 - (void)loadPeakComponentWithName:(NSString *)name withCompletion:(PeakCoreOnReadyCallback)callback {
 
-    if (self.webView == nil) {
-        [self logError:@"PeakCore has no WKWebView. Cannot load Peak Component"];
+    if (self.webView == nil && self.context == nil) {
+        [self logError:@"PeakCore has no WKWebView or JSContext. Cannot load Peak Component"];
         return;
     }
 
     _onReadyCallback = callback;
 
-    if (self.loadingMode == PeakCoreLoadingModeLocalIP && self.debug) {
-        NSString *completeURL = [self.localDevelopmentIPAdress stringByAppendingString:name];
-        [self debugLog:@"Loading remote component from %@", completeURL];
-        [self.webView loadRequest:[NSURLRequest requestWithURL:[[NSURL alloc] initWithString:completeURL]]];
+    if (self.loadingMode == PeakCoreLoadingModeLocalIP) {
+        if (!self.debug) {
+            return;
+        }
+
+        if (self.context) {
+            NSString *javascriptContent = [self getJavascriptAppWithName:name];
+            [self initializeContextWithJavascriptContent:javascriptContent];
+        } else {
+            NSString *completeURL = [self.localDevelopmentIPAdress stringByAppendingString:name];
+            [self debugLog:@"Loading remote component from %@", completeURL];
+            [self.webView loadRequest:[NSURLRequest requestWithURL:[[NSURL alloc] initWithString:completeURL]]];
+        }
+
         return;
-    }
+    } else { // PeakCoreLoadingModeBundle
 
-    NSString *dirName = [NSString stringWithFormat:@"peak-components/%@", name];
-    NSString *absoluteDirName = [NSString stringWithFormat:@"/peak-components/%@", name];
+        // If this is a logic module
+        if (self.context) {
+            NSString *javascriptContent = [self getJavascriptAppWithName:name];
+            [self initializeContextWithJavascriptContent:javascriptContent];
+            return;
+        } else { // if this is a UI module
+            NSString *dirName = [NSString stringWithFormat:@"peak-components/%@", name];
+            NSString *absoluteDirName = [NSString stringWithFormat:@"/peak-components/%@", name];
 
-    NSURL *path = [[NSBundle mainBundle] URLForResource:@"index" withExtension:@"html" subdirectory:dirName];
-    if (path == nil) {
-        @throw [NSException exceptionWithName:@"Component not found" reason:@"Did you run gulp deploy? Did you include the folder 'peak-components' in your project?" userInfo:nil];
+            NSURL *path = [[NSBundle mainBundle] URLForResource:@"index" withExtension:@"html" subdirectory:dirName];
+            if (path == nil) {
+                @throw [NSException exceptionWithName:@"Component not found" reason:@"Did you run gulp deploy? Did you include the folder 'peak-components' in your project?" userInfo:nil];
+            }
+            NSURL *url = [NSURL fileURLWithPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:absoluteDirName] isDirectory:YES];
+            [self debugLog:@"Loading bundle component from %@", dirName];
+            [self.webView loadFileURL:path allowingReadAccessToURL:url];
+        }
+
     }
-    NSURL *url = [NSURL fileURLWithPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:absoluteDirName] isDirectory:YES];
-    [self debugLog:@"Loading bundle component from %@", dirName];
-    [self.webView loadFileURL:path allowingReadAccessToURL:url];
 }
 
+- (void)initializeContextWithJavascriptContent:(NSString *)jscontent {
+    [self.context evaluateScript:@"window = {};  window.webkit = {}; window.webkit.messageHandlers = {}; window.webkit.messageHandlers.PeakCore = {};"];
+    __weak PeakCore *weakSelf = self;
+    self.context[@"window"][@"webkit"][@"messageHandlers"][@"PeakCore"][@"postMessage"] = ^(NSDictionary *call) {
+        NativeCall *nativeCall = [NativeCall callWithDictionary:call];
+        [weakSelf prepareNativeCallHandlingWithCall:nativeCall];
+    };
+    [self.context evaluateScript:jscontent];
+}
+
+
+- (NSString *)getJavascriptAppWithName:(NSString *)name {
+
+    if (self.loadingMode == PeakCoreLoadingModeBundle) {
+        NSString *dirName = [NSString stringWithFormat:@"peak-components/%@/js", name];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"build" ofType:@"js" inDirectory:dirName];
+        if (path == nil) {
+            @throw [NSException exceptionWithName:@"Component not found" reason:@"Did you run gulp deploy? Did you include the folder 'peak-components' in your project?" userInfo:nil];
+        }
+
+        return [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+    } else {
+        NSString *path = [name stringByAppendingString:@"/js/build.js"];
+        NSString *completeURL = [self.localDevelopmentIPAdress stringByAppendingString:path];
+        NSString *jsContent = [NSString stringWithContentsOfURL:[[NSURL alloc] initWithString:completeURL] encoding:NSUTF8StringEncoding error:nil];
+        return jsContent;
+    }
+
+}
 
 - (id)useModule:(Class)moduleClass {
 
@@ -131,22 +186,26 @@
 
             NativeCall *nativeCall = [NativeCall callWithMessage:message];
             // if this call is for the peakCore namespace (this class)
-            if ([nativeCall.methodDefinition.namespace isEqualToString:self.namespace]) {
-                [self handleNativeCall:nativeCall onTarget:self];
-                return;
-            } else {
-                PeakModule *module = self.modules[nativeCall.methodDefinition.namespace];
-                if (module) {
-                    id target = [module targetForNativeCall];
-                    [self handleNativeCall:nativeCall onTarget:target];
-                } else {
-                    [self debugError:@"Module with namespace <%@> not installed!", nativeCall.methodDefinition.namespace];
-                }
-            }
+
+            [self prepareNativeCallHandlingWithCall:nativeCall];
 
         });
 
+    }
+}
 
+- (void)prepareNativeCallHandlingWithCall:(NativeCall *)call {
+    if ([call.methodDefinition.namespace isEqualToString:self.namespace]) {
+        [self handleNativeCall:call onTarget:self];
+        return;
+    } else {
+        PeakModule *module = self.modules[call.methodDefinition.namespace];
+        if (module) {
+            id target = [module targetForNativeCall];
+            [self handleNativeCall:call onTarget:target];
+        } else {
+            [self debugError:@"Module with namespace <%@> not installed!", call.methodDefinition.namespace];
+        }
     }
 }
 
@@ -187,10 +246,20 @@
     }
 
     PeakCoreCallback weakCallback = callback;
-    [self.webView evaluateJavaScript:jsFunctionCall completionHandler:^(id callbackPayload, NSError *error) {
-        if (weakCallback)
-            weakCallback(callbackPayload);
-    }];
+
+    if (self.context) {
+
+        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            JSValue *result = [self.context evaluateScript:jsFunctionCall];
+            NSLog(@"callJS Callback result: %@", result);
+        });
+
+    } else {
+        [self.webView evaluateJavaScript:jsFunctionCall completionHandler:^(id callbackPayload, NSError *error) {
+            if (weakCallback)
+                weakCallback(callbackPayload);
+        }];
+    }
 
 }
 
@@ -254,9 +323,13 @@
     PeakCoreCallback callback = ^(id callbackPayload) {
 
         id serializedPayload = [weakSelf serializePayload:callbackPayload];
-
         NSString *callbackCall = [NSString stringWithFormat:@"window.peak.callCallback('%@', %@);", weakCallbackKey, serializedPayload];
-        [weakSelf.webView evaluateJavaScript:callbackCall completionHandler:nil];
+
+        if (weakSelf.context) {
+            [weakSelf.context evaluateScript:callbackCall];
+        } else {
+            [weakSelf.webView evaluateJavaScript:callbackCall completionHandler:nil];
+        }
 
         weakSelf = nil;
         weakCallbackKey = nil;
@@ -343,6 +416,7 @@
 
 - (void)onReady {
     [self callJSFunctionName:@"enableDebug" inNamespace:@"peakCore" withPayload:@(self.debug)];
+    [self set:@"true" forKey:@"peakReady"];
     if (_onReadyCallback) {
         [self debugLog:@"onReady() called"];
         _onReadyCallback();

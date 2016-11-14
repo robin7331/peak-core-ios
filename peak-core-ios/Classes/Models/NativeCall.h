@@ -15,6 +15,9 @@
 @property (readonly) id payload;
 @property (readonly) NSString *callbackKey;
 
++ (NativeCall *)callWithDictionary:(NSDictionary *)dict;
+- (instancetype)initWithDictionary:(NSDictionary *)dict;
+
 + (NativeCall *)callWithMessage:(WKScriptMessage *)message;
 - (instancetype)initWithMessage:(WKScriptMessage *)message;
 @end

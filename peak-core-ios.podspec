@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'peak-core-ios'
-  s.version          = '0.2.3'
+  s.version          = '0.3.0'
   s.summary          = 'PEAK Core iOS Library'
 
 # This description is used to generate tags and improve search results.

@@ -5,6 +5,7 @@
 
 #import <Foundation/Foundation.h>
 #import <WebKit/WebKit.h>
+#import <JavaScriptCore/JavaScriptCore.h>
 
 #import "PeakModule.h"
 #import "PeakWebViewContainer.h"

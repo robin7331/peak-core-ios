@@ -10,36 +10,54 @@
 
 }
 
-+ (MethodDefinition *)definitionWithMessage:(WKScriptMessage *)message {
-    return [[MethodDefinition alloc] initWithMessage:message];
++ (MethodDefinition *)definitionWithDictionary:(NSDictionary *)dict {
+    return [[MethodDefinition alloc] initWithDictionary:dict];
 }
 
-- (instancetype)initWithMessage:(WKScriptMessage *)message {
+- (instancetype)initWithDictionary:(NSDictionary *)dict {
     self = [super init];
     if (self) {
-
         _namespace = nil;
         _functionName = nil;
         _payloadType = MethodDefinitionPayloadTypeNone;
         _typeOfPayloadData = @{};
 
-        if (message != nil) {
-            NSDictionary *msg = (NSDictionary *) message.body;
-            if (msg != nil) {
-                NSDictionary *methodDefinition = msg[@"methodDefinition"];
+        if (dict != nil) {
+            NSDictionary *methodDefinition = dict[@"methodDefinition"];
 
-                if (methodDefinition != nil) {
-                    _namespace = methodDefinition[@"namespace"];
-                    _functionName = methodDefinition[@"name"];
-                    _payloadType = [self getPayloadTypeForMethodDefinition:methodDefinition[@"payload"]];
-                    _typeOfPayloadData = [self getTypeOfPayloadDataForMethodDefinition:methodDefinition[@"payload"]];
-                }
+            if (methodDefinition != nil) {
+                _namespace = methodDefinition[@"namespace"];
+                _functionName = methodDefinition[@"name"];
+                _payloadType = [self getPayloadTypeForMethodDefinition:methodDefinition[@"payload"]];
+                _typeOfPayloadData = [self getTypeOfPayloadDataForMethodDefinition:methodDefinition[@"payload"]];
             }
         }
     }
 
     return self;
 }
+
++ (MethodDefinition *)definitionWithMessage:(WKScriptMessage *)message {
+    return [[MethodDefinition alloc] initWithMessage:message];
+}
+
+- (instancetype)initWithMessage:(WKScriptMessage *)message {
+
+    _namespace = nil;
+    _functionName = nil;
+    _payloadType = MethodDefinitionPayloadTypeNone;
+    _typeOfPayloadData = @{};
+
+    if (message != nil) {
+        NSDictionary *msg = (NSDictionary *) message.body;
+        if (msg != nil) {
+            return [self initWithDictionary:msg];
+        }
+    }
+
+    return nil;
+}
+
 
 
 
