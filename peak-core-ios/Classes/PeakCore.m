@@ -13,7 +13,6 @@
 @property NSString *namespace;
 @property NSString *name;
 @property NSString *version;
-@property PeakSharedStore *store;
 @property JSContext *context;
 @end
 
@@ -24,12 +23,14 @@
 - (void)basicInit {
     _namespace = @"peakCore";
     _name = @"peak-core-ios";
-    _version = @"0.1.8";
+    _version = @"0.1.9";
     _modules = [@{} mutableCopy];
     _loadingMode = PeakCoreLoadingModeBundle;
     _debug = NO;
 
-    self.store = [PeakSharedStore instance];
+    [[PeakSharedStore instance] addValueChangedHandler:self];
+
+    [self debugLog:[NSString stringWithFormat:@"PeakCore iOS Initialization (%@)", _version] withTag:[self loggingTag]];
 }
 
 - (void)webViewInit {
@@ -88,10 +89,12 @@
         if (self.context) {
             NSString *javascriptContent = [self getJavascriptAppWithName:name];
             [self initializeContextWithJavascriptContent:javascriptContent];
+            _componentName = name;
         } else {
             NSString *completeURL = [self.localDevelopmentIPAdress stringByAppendingString:name];
             [self debugLog:@"Loading remote component from %@", completeURL];
             [self.webView loadRequest:[NSURLRequest requestWithURL:[[NSURL alloc] initWithString:completeURL]]];
+            _componentName = name;
         }
 
         return;
@@ -101,6 +104,7 @@
         if (self.context) {
             NSString *javascriptContent = [self getJavascriptAppWithName:name];
             [self initializeContextWithJavascriptContent:javascriptContent];
+            _componentName = name;
             return;
         } else { // if this is a UI module
             NSString *dirName = [NSString stringWithFormat:@"peak-components/%@", name];
@@ -113,6 +117,7 @@
             NSURL *url = [NSURL fileURLWithPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:absoluteDirName] isDirectory:YES];
             [self debugLog:@"Loading bundle component from %@", dirName];
             [self.webView loadFileURL:path allowingReadAccessToURL:url];
+            _componentName = name;
         }
 
     }
@@ -363,16 +368,33 @@
     return nil;
 }
 
+/**
+ * Gets called by the native userland side.
+ * @param key
+ * @return
+ */
+- (NSString *)getValueForKey:(NSString *)key {
+    return [[PeakSharedStore instance] getSharedValue:key];
+}
 
-
+/**
+ * Gets called by the native userland side.
+ * @param value
+ * @param key
+ */
 - (void)set:(NSString *)value forKey:(NSString *)key {
     NSDictionary *payload = @{@"key": key, @"value": value};
 
-    [self.store setSharedValue:payload];
+    [[PeakSharedStore instance] setSharedValue:payload fromSender:self];
     [self callJSFunctionName:@"setSharedValue" inNamespace:@"peakCore" withPayload:payload];
 
 }
 
+/**
+ * Gets called by the native userland side.
+ * @param value
+ * @param key
+ */
 - (void)setPersistent:(NSString *)value forKey:(NSString *)key {
     NSDictionary *payload = @{
             @"key": key,
@@ -380,11 +402,17 @@
             @"secure": @(false)
     };
 
-    [self.store setSharedPersistentValue:payload];
+    [[PeakSharedStore instance] setSharedPersistentValue:payload fromSender:self];
     [self callJSFunctionName:@"setSharedValue" inNamespace:@"peakCore" withPayload:payload];
 
 }
 
+
+/**
+ * Gets called by the native userland side.
+ * @param value
+ * @param key
+ */
 - (void)setPersistentSecure:(NSString *)value forKey:(NSString *)key {
     NSDictionary *payload = @{
             @"key": key,
@@ -392,25 +420,43 @@
             @"secure": @(true)
     };
 
-    [self.store setSharedPersistentValue:payload];
+    [[PeakSharedStore instance] setSharedPersistentValue:payload fromSender:self];
     [self callJSFunctionName:@"setSharedValue" inNamespace:@"peakCore" withPayload:payload];
 
 }
 
-- (NSString *)getValueForKey:(NSString *)key {
-    return [self.store getSharedValue:key];
-}
 
+
+/**
+ * Gets called by the JS side
+ * @param data
+ */
 - (void)setSharedValue:(NSDictionary *)data {
-    [self.store setSharedValue:data];
+    [[PeakSharedStore instance] setSharedValue:data fromSender:self];
 }
 
+/**
+ * Gets called by the JS side
+ * @param data
+ */
 - (void)setSharedPersistentValue:(NSDictionary *)data {
-    [self.store setSharedPersistentValue:data];
+    [[PeakSharedStore instance] setSharedPersistentValue:data fromSender:self];
 }
 
+/**
+ * Gets called by the JS side
+ */
 - (void)getSharedStoreWithCallback:(PeakCoreCallback)callback {
-    callback([self.store getStore]);
+    callback([[PeakSharedStore instance] getStore]);
+}
+
+/**
+ * Gets called by the PeakSharedStore if a value has changed
+ * @param value
+ * @param key
+ */
+- (void)onChangedStorePayload:(NSDictionary *)payload {
+    [self callJSFunctionName:@"setSharedValue" inNamespace:@"peakCore" withPayload:payload];
 }
 
 
@@ -509,7 +555,14 @@
  * @return
  */
 - (NSString *)loggingTag {
-    return [NSString stringWithFormat:@"%@ (%@)", self.name, self.version];
+    NSString *name = (self.componentName) ? [NSString stringWithFormat:@"[%@] ", self.componentName] : @"";
+    return [NSString stringWithFormat:@"iOS %@~>", name];
 }
+
+
+- (void)dealloc {
+    [[PeakSharedStore instance] removeValueChangedHandler:self];
+}
+
 
 @end

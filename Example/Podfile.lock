@@ -1,5 +1,7 @@
 PODS:
-  - peak-core-ios (0.2.2):
+  - JSCoreBom (1.1.1)
+  - peak-core-ios (0.3.0):
+    - JSCoreBom (~> 1.1.1)
     - UICKeyChainStore (~> 2.1.0)
   - UICKeyChainStore (2.1.0)
 
@@ -11,7 +13,8 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  peak-core-ios: ecf5d8809319e764993b65ab4ee384da7bc37fb1
+  JSCoreBom: 712590b897ecd74d9fa9cb0f16857491411c932b
+  peak-core-ios: b170d32420caaa0dfc6cfd68fd7375c0832c2129
   UICKeyChainStore: f1cbd42216a113f0165de1e733e62905b8823432
 
 PODFILE CHECKSUM: 38c4ec3fb6248f7c58bd78dbab4203500437a385
