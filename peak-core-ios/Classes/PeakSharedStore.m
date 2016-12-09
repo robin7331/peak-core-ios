@@ -4,22 +4,25 @@
 
 #import "PeakSharedStore.h"
 #import "UICKeyChainStore.h"
+#import "PeakCore.h"
 
 @interface PeakSharedStore()
 @property NSMutableDictionary *store;
 @property UICKeyChainStore *keychainStore;
+@property NSMutableArray *valueChangedEventHandlers;
 @end
 
-@implementation PeakSharedStore {
+@implementation PeakSharedStore
 
-}
 + (PeakSharedStore *)instance {
     static PeakSharedStore *_instance = nil;
+
 
     @synchronized (self) {
         if (_instance == nil) {
             _instance = [[self alloc] init];
             _instance.store = [[_instance getPersistentStore] mutableCopy];
+            _instance.valueChangedEventHandlers = [NSMutableArray new];
 
             NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
             _instance.keychainStore = [UICKeyChainStore keyChainStoreWithService:bundleIdentifier];
@@ -32,15 +35,38 @@
     return _instance;
 }
 
+- (void)addValueChangedHandler:(PeakCore *)peakCoreInstance {
+    if (![self.valueChangedEventHandlers containsObject:peakCoreInstance]) {
+        [self.valueChangedEventHandlers addObject:peakCoreInstance];
+    }
+}
+
+- (void)removeValueChangedHandler:(PeakCore *)peakCoreInstance {
+    if (![self.valueChangedEventHandlers containsObject:peakCoreInstance]) {
+        [self.valueChangedEventHandlers removeObject:peakCoreInstance];
+    }
+}
+
+
 - (NSDictionary *)getStore {
     return self.store;
 }
 
-- (void)setSharedValue:(NSDictionary *)data {
-    self.store[data[@"key"]] = data[@"value"];
+- (NSString *)getSharedValue:(NSString *)key  {
+    return self.store[key];
 }
 
-- (void)setSharedPersistentValue:(NSDictionary *)data {
+- (void)setSharedValue:(NSDictionary *)data fromSender:(PeakCore *)sender {
+    self.store[data[@"key"]] = data[@"value"];
+
+    for (PeakCore *coreHandler in self.valueChangedEventHandlers) {
+        if (coreHandler == sender)
+            continue;
+        [coreHandler onChangedStorePayload:data];
+    }
+}
+
+- (void)setSharedPersistentValue:(NSDictionary *)data fromSender:(PeakCore *)sender {
 
     self.store[data[@"key"]] = data[@"value"];
 
@@ -61,16 +87,17 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 
+    for (PeakCore *coreHandler in self.valueChangedEventHandlers) {
+        if (coreHandler == sender)
+            continue;
+        [coreHandler onChangedStorePayload:data];
+    }
 }
 
 - (NSDictionary *)getPersistentStore {
     return ([[NSUserDefaults standardUserDefaults] objectForKey:@"PeakCorePersistentStore"]) ?: @{};
 }
 
-- (NSString *)getSharedValue:(NSString *)key  {
-
-    return self.store[key];
-}
 
 - (NSDictionary *)generateStoreDictionaryFromKeyStore:(UICKeyChainStore *)store {
     NSMutableDictionary *temp = [@{} mutableCopy];

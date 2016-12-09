@@ -4,14 +4,19 @@
 
 #import <Foundation/Foundation.h>
 
+@class PeakCore;
+
 
 @interface PeakSharedStore : NSObject
 + (PeakSharedStore *)instance;
 
+- (void)addValueChangedHandler:(PeakCore *)peakCoreInstance;
+- (void)removeValueChangedHandler:(PeakCore *)peakCoreInstance;
+
 - (NSDictionary *)getStore;
-- (void)setSharedValue:(NSDictionary *)data;
 - (NSString *)getSharedValue:(NSString *)key;
-- (void)setSharedPersistentValue:(NSDictionary *)dictionary;
+- (void)setSharedValue:(NSDictionary *)data fromSender:(PeakCore *)sender;
+- (void)setSharedPersistentValue:(NSDictionary *)dictionary fromSender:(PeakCore *)sender;
 
 
 @end
