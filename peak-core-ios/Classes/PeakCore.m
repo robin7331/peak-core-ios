@@ -27,6 +27,8 @@
     _modules = [@{} mutableCopy];
     _loadingMode = PeakCoreLoadingModeBundle;
     _debug = NO;
+    _fadeInOnReady = YES;
+    _fadeInDuration = 0.2f;
 
     [[PeakSharedStore instance] addValueChangedHandler:self];
 
@@ -41,6 +43,10 @@
     configuration.userContentController = contentController;
 
     _webViewConfiguration = configuration;
+
+    if (self.fadeInOnReady) {
+        self.webView.alpha = 0.0f;
+    }
 }
 
 - (instancetype)initForLogicModule {
@@ -91,6 +97,11 @@
             [self initializeContextWithJavascriptContent:javascriptContent];
             _componentName = name;
         } else {
+
+            if (self.fadeInOnReady) {
+                self.webView.alpha = 0;
+            }
+
             NSString *completeURL = [self.localDevelopmentIPAdress stringByAppendingString:name];
             [self debugLog:@"Loading remote component from %@", completeURL];
             [self.webView loadRequest:[NSURLRequest requestWithURL:[[NSURL alloc] initWithString:completeURL]]];
@@ -107,6 +118,11 @@
             _componentName = name;
             return;
         } else { // if this is a UI module
+
+            if (self.fadeInOnReady) {
+                self.webView.alpha = 0;
+            }
+
             NSString *dirName = [NSString stringWithFormat:@"peak-components/%@", name];
             NSString *absoluteDirName = [NSString stringWithFormat:@"/peak-components/%@", name];
 
@@ -463,6 +479,13 @@
 - (void)onReady {
     [self callJSFunctionName:@"enableDebug" inNamespace:@"peakCore" withPayload:@(self.debug)];
     [self set:@"true" forKey:@"peakReady"];
+
+    if (self.fadeInOnReady) {
+        [UIView animateWithDuration:self.fadeInDuration animations:^{
+            self.webView.alpha = 1.0f;
+        }];
+    }
+
     if (_onReadyCallback) {
         [self debugLog:@"onReady() called"];
         _onReadyCallback();

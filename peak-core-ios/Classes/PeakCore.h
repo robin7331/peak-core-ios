@@ -29,6 +29,8 @@ typedef void (^PeakCoreOnReadyCallback)(void);
 @property NSString *localDevelopmentIPAdress;
 @property PeakCoreLoadingMode loadingMode;
 @property BOOL debug;
+@property BOOL fadeInOnReady;
+@property NSTimeInterval fadeInDuration;
 
 
 - (instancetype)initForLogicModule;
