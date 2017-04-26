@@ -1,7 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="gWT-cP-CzG">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="gWT-cP-CzG">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -18,32 +22,127 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2OU-iQ-tOQ" customClass="PeakWebViewContainer">
+                                <rect key="frame" x="0.0" y="293" width="375" height="374"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Test123" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tuk-ua-U7r">
+                                <rect key="frame" x="16" y="99" width="343" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Store Key" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5UJ-7G-6eG">
+                                <rect key="frame" x="16" y="72" width="74" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value For Key" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="daC-yy-fdj">
+                                <rect key="frame" x="16" y="150" width="105" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="u31-Mq-Y0q">
+                                <rect key="frame" x="16" y="179" width="343" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FO3-HE-dYy">
+                                <rect key="frame" x="24" y="217" width="30" height="30"/>
+                                <state key="normal" title="Set"/>
+                                <connections>
+                                    <action selector="set:" destination="whP-gf-Uak" eventType="touchUpInside" id="UzD-Jl-mFu"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iky-7H-fyx">
+                                <rect key="frame" x="62" y="217" width="96" height="30"/>
+                                <state key="normal" title="Set Persistent"/>
+                                <connections>
+                                    <action selector="setPersistent:" destination="whP-gf-Uak" eventType="touchUpInside" id="rmx-nY-3RN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bLH-tD-nly">
+                                <rect key="frame" x="166" y="217" width="148" height="30"/>
+                                <state key="normal" title="Set Persistent Secure"/>
+                                <connections>
+                                    <action selector="setPersistentSecure:" destination="whP-gf-Uak" eventType="touchUpInside" id="dBH-eB-EuO"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ww-I9-vWg">
+                                <rect key="frame" x="24" y="255" width="30" height="30"/>
+                                <state key="normal" title="Del"/>
+                                <connections>
+                                    <action selector="del:" destination="whP-gf-Uak" eventType="touchUpInside" id="twH-yD-9bZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eHd-3w-j9z">
+                                <rect key="frame" x="62" y="255" width="96" height="30"/>
+                                <state key="normal" title="Del Persistent"/>
+                                <connections>
+                                    <action selector="delPersistent:" destination="whP-gf-Uak" eventType="touchUpInside" id="jl6-L8-bHU"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uBZ-o4-NhM">
+                                <rect key="frame" x="166" y="255" width="148" height="30"/>
+                                <state key="normal" title="Del Persistent Secure"/>
+                                <connections>
+                                    <action selector="delPersistentSecure:" destination="whP-gf-Uak" eventType="touchUpInside" id="3Z8-ej-Gpu"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="2OU-iQ-tOQ" secondAttribute="trailing" id="0BQ-Wb-mCL"/>
-                            <constraint firstItem="Mvr-aV-6Um" firstAttribute="top" secondItem="2OU-iQ-tOQ" secondAttribute="bottom" id="Ihd-Wq-LZC"/>
-                            <constraint firstItem="2OU-iQ-tOQ" firstAttribute="top" secondItem="uEw-UM-LJ8" secondAttribute="bottom" id="a0x-no-3D5"/>
-                            <constraint firstItem="2OU-iQ-tOQ" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" id="spN-Wn-a1X"/>
+                            <constraint firstItem="2OU-iQ-tOQ" firstAttribute="top" secondItem="uBZ-o4-NhM" secondAttribute="bottom" constant="8" id="1a8-Qa-m87"/>
+                            <constraint firstItem="bLH-tD-nly" firstAttribute="top" secondItem="u31-Mq-Y0q" secondAttribute="bottom" constant="8" id="1aV-Y1-zh4"/>
+                            <constraint firstItem="eHd-3w-j9z" firstAttribute="leading" secondItem="4ww-I9-vWg" secondAttribute="trailing" constant="8" id="2aL-oR-vlQ"/>
+                            <constraint firstItem="4ww-I9-vWg" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" constant="8" id="5HC-0I-NwK"/>
+                            <constraint firstItem="tuk-ua-U7r" firstAttribute="top" secondItem="5UJ-7G-6eG" secondAttribute="bottom" constant="6" id="8gn-kb-bid"/>
+                            <constraint firstItem="u31-Mq-Y0q" firstAttribute="top" secondItem="daC-yy-fdj" secondAttribute="bottom" constant="8" id="EhQ-Mz-pAD"/>
+                            <constraint firstItem="tuk-ua-U7r" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" id="JT0-Kt-ml2"/>
+                            <constraint firstItem="FO3-HE-dYy" firstAttribute="top" secondItem="u31-Mq-Y0q" secondAttribute="bottom" constant="8" id="LfD-D8-psJ"/>
+                            <constraint firstItem="eHd-3w-j9z" firstAttribute="top" secondItem="iky-7H-fyx" secondAttribute="bottom" constant="8" id="MH2-Oz-gCO"/>
+                            <constraint firstItem="5UJ-7G-6eG" firstAttribute="top" secondItem="uEw-UM-LJ8" secondAttribute="bottom" constant="8" id="PXF-WR-ZPe"/>
+                            <constraint firstItem="daC-yy-fdj" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" id="S3t-cR-eXL"/>
+                            <constraint firstItem="tuk-ua-U7r" firstAttribute="trailing" secondItem="TpU-gO-2f1" secondAttribute="trailingMargin" id="SLi-24-dff"/>
+                            <constraint firstItem="u31-Mq-Y0q" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" id="SSK-Zy-Rbs"/>
+                            <constraint firstItem="uBZ-o4-NhM" firstAttribute="leading" secondItem="eHd-3w-j9z" secondAttribute="trailing" constant="8" id="Y2Q-VY-jza"/>
+                            <constraint firstItem="FO3-HE-dYy" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" constant="8" id="h6J-an-J2L"/>
+                            <constraint firstItem="iky-7H-fyx" firstAttribute="top" secondItem="u31-Mq-Y0q" secondAttribute="bottom" constant="8" id="h7a-Vk-eRv"/>
+                            <constraint firstItem="Mvr-aV-6Um" firstAttribute="top" secondItem="2OU-iQ-tOQ" secondAttribute="bottom" id="i8O-eD-WfY"/>
+                            <constraint firstItem="uBZ-o4-NhM" firstAttribute="top" secondItem="bLH-tD-nly" secondAttribute="bottom" constant="8" id="l6P-cE-ufO"/>
+                            <constraint firstAttribute="trailing" secondItem="2OU-iQ-tOQ" secondAttribute="trailing" id="nX9-sG-vwE"/>
+                            <constraint firstItem="bLH-tD-nly" firstAttribute="leading" secondItem="iky-7H-fyx" secondAttribute="trailing" constant="8" id="oPm-pX-CS4"/>
+                            <constraint firstItem="u31-Mq-Y0q" firstAttribute="trailing" secondItem="TpU-gO-2f1" secondAttribute="trailingMargin" id="osU-yQ-e6P"/>
+                            <constraint firstItem="iky-7H-fyx" firstAttribute="leading" secondItem="FO3-HE-dYy" secondAttribute="trailing" constant="8" id="pTI-NH-gDi"/>
+                            <constraint firstItem="5UJ-7G-6eG" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" id="sWP-UH-ESF"/>
+                            <constraint firstItem="4ww-I9-vWg" firstAttribute="top" secondItem="FO3-HE-dYy" secondAttribute="bottom" constant="8" id="w9r-90-pV8"/>
+                            <constraint firstItem="daC-yy-fdj" firstAttribute="top" secondItem="tuk-ua-U7r" secondAttribute="bottom" constant="21" id="wf5-Wt-y6i"/>
+                            <constraint firstItem="2OU-iQ-tOQ" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" id="xmr-mp-mCA"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="baN-8Z-lgI">
-                        <barButtonItem key="leftBarButtonItem" title="Reload Component" id="UwV-bi-ahf">
+                        <barButtonItem key="leftBarButtonItem" title="Call JS Method" id="UwV-bi-ahf">
                             <connections>
-                                <action selector="reloadComponent:" destination="whP-gf-Uak" id="o8L-PU-xN8"/>
+                                <action selector="callJSMethod:" destination="whP-gf-Uak" id="JRC-1P-s8h"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Get current result" id="RBu-Uc-Szl"/>
+                        <barButtonItem key="rightBarButtonItem" title="Get Store Key" id="RBu-Uc-Szl">
+                            <connections>
+                                <action selector="get:" destination="whP-gf-Uak" id="Uq0-6T-cEU"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="keyField" destination="tuk-ua-U7r" id="BNd-BM-OdS"/>
                         <outlet property="peakWebView" destination="2OU-iQ-tOQ" id="zYt-OG-u8x"/>
+                        <outlet property="valueField" destination="u31-Mq-Y0q" id="G6C-En-zT5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tc2-Qw-aMS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1117" y="433"/>
+            <point key="canvasLocation" x="1116" y="432.23388305847078"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="fHQ-3C-Pd5">
