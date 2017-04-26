@@ -34,6 +34,7 @@ typedef void (^PeakCoreOnReadyCallback)(void);
 
 
 - (instancetype)initForLogicModule;
+- (instancetype)initForLogicModuleInHiddenWebViewInView:(UIView *)view;
 
 - (void)loadPeakComponentWithName:(NSString *)name;
 - (void)loadPeakComponentWithName:(NSString *)name withCompletion:(PeakCoreOnReadyCallback)callback;

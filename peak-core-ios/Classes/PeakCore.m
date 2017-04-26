@@ -14,6 +14,7 @@
 @property NSString *name;
 @property NSString *version;
 @property JSContext *context;
+@property PeakWebViewContainer *hiddenWebView;
 @end
 
 @implementation PeakCore {
@@ -23,7 +24,7 @@
 - (void)basicInit {
     _namespace = @"peakCore";
     _name = @"peak-core-ios";
-    _version = @"0.1.9";
+    _version = @"0.4.1";
     _modules = [@{} mutableCopy];
     _loadingMode = PeakCoreLoadingModeBundle;
     _debug = NO;
@@ -63,6 +64,23 @@
 
     return self;
 }
+
+- (instancetype)initForLogicModuleInHiddenWebViewInView:(UIView *)view {
+    self = [super init];
+    if (self) {
+        [self basicInit];
+
+        self.fadeInOnReady = NO;
+
+        [self webViewInit];
+
+        self.hiddenWebView = [[PeakWebViewContainer alloc] initWithFrame:CGRectZero];
+        [view addSubview:self.hiddenWebView];
+        [self.hiddenWebView generateWKWebViewWithPeakCore:self];
+    }
+    return self;
+}
+
 
 - (instancetype)init {
     self = [super init];
