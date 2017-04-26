@@ -28,7 +28,7 @@
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
 
-    self.core = [[PeakCore alloc] initForLogicModule];
+    self.core = [[PeakCore alloc] initForLogicModuleInHiddenWebViewInView:[UIApplication sharedApplication].keyWindow];
     self.core.localDevelopmentIPAdress = @"http://192.168.188.22:3000/";
     self.core.loadingMode = PeakCoreLoadingModeLocalIP;
     self.core.debug = YES;

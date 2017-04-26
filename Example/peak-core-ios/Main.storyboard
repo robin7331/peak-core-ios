@@ -136,7 +136,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="keyField" destination="tuk-ua-U7r" id="BNd-BM-OdS"/>
-                        <outlet property="peakWebView" destination="2OU-iQ-tOQ" id="zYt-OG-u8x"/>
+                        <outlet property="peakWebView" destination="2OU-iQ-tOQ" id="EKw-vD-XwQ"/>
                         <outlet property="valueField" destination="u31-Mq-Y0q" id="G6C-En-zT5"/>
                     </connections>
                 </viewController>
