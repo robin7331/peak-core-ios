@@ -43,8 +43,13 @@ typedef void (^PeakCoreOnReadyCallback)(void);
 - (void)set:(NSString *)value forKey:(NSString *)key;
 - (void)setPersistent:(NSString *)value forKey:(NSString *)key;
 - (void)setPersistentSecure:(NSString *)value forKey:(NSString *)key;
+- (void)delete:(NSString *)key;
+- (void)deletePersistent:(NSString *)key;
+- (void)deletePersistentSecure:(NSString *)key;
+
 
 - (void)onChangedStorePayload:(NSDictionary *)payload;
+- (void)onDeletedStoreValue:(NSString *)key;
 
 - (NSString *)getValueForKey:(NSString *)key;
 

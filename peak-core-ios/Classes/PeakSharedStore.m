@@ -68,8 +68,6 @@
 
 - (void)setSharedPersistentValue:(NSDictionary *)data fromSender:(PeakCore *)sender {
 
-    self.store[data[@"key"]] = data[@"value"];
-
     BOOL secure = [data[@"secure"] boolValue];
     if (secure) {
 
@@ -87,12 +85,37 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 
+    [self setSharedValue:data fromSender:sender];
+}
+
+- (void)deleteSharedValue:(NSString *)key fromSender:(PeakCore *)sender {
+    [self.store removeObjectForKey:key];
+
     for (PeakCore *coreHandler in self.valueChangedEventHandlers) {
         if (coreHandler == sender)
             continue;
-        [coreHandler onChangedStorePayload:data];
+        [coreHandler onDeletedStoreValue:key];
     }
 }
+
+- (void)deleteSharedPersistentValue:(NSDictionary *)data fromSender:(PeakCore *)sender {
+
+    BOOL secure = [data[@"secure"] boolValue];
+    NSString *key = data[@"key"];
+
+    if (secure) {
+        [self.keychainStore removeItemForKey:key];
+    } else {
+        NSMutableDictionary *persistentStore = [[self getPersistentStore] mutableCopy];
+        [persistentStore removeObjectForKey:key];
+
+        [[NSUserDefaults standardUserDefaults] setObject:persistentStore forKey:@"PeakCorePersistentStore"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+
+    [self deleteSharedValue:key fromSender:sender];
+}
+
 
 - (NSDictionary *)getPersistentStore {
     return ([[NSUserDefaults standardUserDefaults] objectForKey:@"PeakCorePersistentStore"]) ?: @{};

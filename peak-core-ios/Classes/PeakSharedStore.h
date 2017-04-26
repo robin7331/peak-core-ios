@@ -16,7 +16,8 @@
 - (NSDictionary *)getStore;
 - (NSString *)getSharedValue:(NSString *)key;
 - (void)setSharedValue:(NSDictionary *)data fromSender:(PeakCore *)sender;
-- (void)setSharedPersistentValue:(NSDictionary *)dictionary fromSender:(PeakCore *)sender;
-
+- (void)setSharedPersistentValue:(NSDictionary *)data fromSender:(PeakCore *)sender;
+- (void)deleteSharedValue:(NSString *)key fromSender:(PeakCore *)sender;
+- (void)deleteSharedPersistentValue:(NSDictionary *)data fromSender:(PeakCore *)sender;
 
 @end

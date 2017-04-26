@@ -272,7 +272,6 @@
 
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             JSValue *result = [self.context evaluateScript:jsFunctionCall];
-            NSLog(@"callJS Callback result: %@", result);
         });
 
     } else {
@@ -442,6 +441,31 @@
 }
 
 
+- (void)delete:(NSString *)key {
+    [[PeakSharedStore instance] deleteSharedValue:key fromSender:self];
+    [self callJSFunctionName:@"deleteSharedValue" inNamespace:@"peakCore" withPayload:key];
+}
+- (void)deletePersistent:(NSString *)key {
+
+    NSDictionary *payload = @{
+            @"key": key,
+            @"secure": @(false)
+    };
+    [[PeakSharedStore instance] deleteSharedPersistentValue:payload fromSender:self];
+    [self callJSFunctionName:@"deleteSharedValue" inNamespace:@"peakCore" withPayload:key];
+
+}
+- (void)deletePersistentSecure:(NSString *)key {
+
+    NSDictionary *payload = @{
+            @"key": key,
+            @"secure": @(true)
+    };
+    [[PeakSharedStore instance] deleteSharedPersistentValue:payload fromSender:self];
+    [self callJSFunctionName:@"deleteSharedValue" inNamespace:@"peakCore" withPayload:key];
+}
+
+
 
 /**
  * Gets called by the JS side
@@ -466,6 +490,15 @@
     callback([[PeakSharedStore instance] getStore]);
 }
 
+- (void)deleteSharedValue:(NSString *)key {
+    [[PeakSharedStore instance] deleteSharedValue:key fromSender:self];
+}
+
+- (void)deleteSharedPersistentValue:(NSDictionary *)data {
+    [[PeakSharedStore instance] deleteSharedPersistentValue:data fromSender:self];
+}
+
+
 /**
  * Gets called by the PeakSharedStore if a value has changed
  * @param value
@@ -473,6 +506,10 @@
  */
 - (void)onChangedStorePayload:(NSDictionary *)payload {
     [self callJSFunctionName:@"setSharedValue" inNamespace:@"peakCore" withPayload:payload];
+}
+
+- (void)onDeletedStoreValue:(NSString *)key {
+    [self callJSFunctionName:@"deleteSharedValue" inNamespace:@"peakCore" withPayload:key];
 }
 
 
