@@ -1,4 +1,4 @@
-# peak-core-ios
+# Peak Core iOS
 [![Version](https://img.shields.io/cocoapods/v/peak-core-ios.svg?style=flat)](http://cocoapods.org/pods/peak-core-ios)
 [![License](https://img.shields.io/cocoapods/l/peak-core-ios.svg?style=flat)](http://cocoapods.org/pods/peak-core-ios)
 [![Platform](https://img.shields.io/cocoapods/p/peak-core-ios.svg?style=flat)](http://cocoapods.org/pods/peak-core-ios)
