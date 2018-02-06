@@ -202,7 +202,14 @@
         }
     }
 
-    id module = [[moduleClass alloc] performSelector:NSSelectorFromString(@"initWithPeakCoreInstance:") withObject:self];
+    id module = [moduleClass alloc];
+
+    SEL selector = NSSelectorFromString(@"initWithPeakCoreInstance:");
+    IMP imp = [moduleClass methodForSelector:selector];
+    void (*func)(id, SEL, PeakCore*) = (void *)imp;
+
+    func(moduleClass, selector, self);
+
     PeakModule *m = (PeakModule *) module;
     [m onBeforeInstallation];
 
@@ -289,7 +296,7 @@
     if (self.context) {
 
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            JSValue *result = [self.context evaluateScript:jsFunctionCall];
+            [self.context evaluateScript:jsFunctionCall];
         });
 
     } else {
