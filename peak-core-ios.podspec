@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'peak-core-ios'
   s.version          = '0.4.2'
-  s.summary          = 'PEAK Core iOS Library'
+  s.summary          = 'Peak Core iOS Library'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -21,12 +21,12 @@ Pod::Spec.new do |s|
 TODO: Add long description of the pod here.
                        DESC
 
-  s.homepage         = 'https://bitbucket.org/bitmechanicsgmbh/peak-core-ios'
+  s.homepage         = 'https://github.com/robin7331/peak-core-ios'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Robin Reiter' => 'robin7331@gmail.com' }
-  s.source           = { :git => 'https://robin-bitmechanics@bitbucket.org/bitmechanicsgmbh/peak-core-ios.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.source           = { :git => 'https://github.com/robin7331/peak-core-ios.git', :tag => s.version.to_s }
+  s.social_media_url = 'https://twitter.com/robin7331'
 
   s.ios.deployment_target = '8.0'
 
