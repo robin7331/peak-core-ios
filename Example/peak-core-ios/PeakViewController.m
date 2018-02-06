@@ -40,7 +40,7 @@
 
     [self.core loadPeakComponentWithName:@"sample-logic-module" withCompletion:^{
 
-//        [self.core set:@"Gay" forKey:@"Test123"];
+//        [self.core set:@"Test" forKey:@"Test123"];
 //        [self.userland callJSFunctionName:@"sort" withPayload:@[@(1), @(5), @(3)] andCallback:^(id callbackPayload) {
 //            NSLog(@"Callback: %@", callbackPayload);
 //        }];

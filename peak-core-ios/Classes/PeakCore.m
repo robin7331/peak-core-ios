@@ -24,7 +24,7 @@
 - (void)basicInit {
     _namespace = @"peakCore";
     _name = @"peak-core-ios";
-    _version = @"0.4.3";
+    _version = @"0.4.4";
     _modules = [@{} mutableCopy];
     _loadingMode = PeakCoreLoadingModeBundle;
     _debug = NO;
