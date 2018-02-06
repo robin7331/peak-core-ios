@@ -1,6 +1,4 @@
 # peak-core-ios
-
-[![CI Status](http://img.shields.io/travis/Robin Reiter/peak-core-ios.svg?style=flat)](https://travis-ci.org/Robin Reiter/peak-core-ios)
 [![Version](https://img.shields.io/cocoapods/v/peak-core-ios.svg?style=flat)](http://cocoapods.org/pods/peak-core-ios)
 [![License](https://img.shields.io/cocoapods/l/peak-core-ios.svg?style=flat)](http://cocoapods.org/pods/peak-core-ios)
 [![Platform](https://img.shields.io/cocoapods/p/peak-core-ios.svg?style=flat)](http://cocoapods.org/pods/peak-core-ios)
@@ -10,6 +8,8 @@
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
+
+``` iOS 9.0 or newer is required to use Peak ```
 
 ## Installation
 
