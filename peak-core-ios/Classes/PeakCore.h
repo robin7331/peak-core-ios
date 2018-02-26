@@ -17,6 +17,14 @@ typedef NS_ENUM(NSInteger, PeakCoreLoadingMode) {
     PeakCoreLoadingModeLocalIP
 };
 
+typedef NS_ENUM(NSInteger, PeakCoreComponentUpdateCriteria) {
+    PeakCoreComponentUpdateCriteriaVersion,
+    PeakCoreComponentUpdateCriteriaBuildNumber,
+    PeakCoreComponentUpdateCriteriaTimestamp
+};
+
+
+
 typedef void (^PeakCoreCallback)(id callbackPayload);
 typedef void (^PeakCoreOnReadyCallback)(void);
 
@@ -35,6 +43,9 @@ typedef void (^PeakCoreOnReadyCallback)(void);
 
 - (instancetype)initForLogicModule;
 - (instancetype)initForLogicModuleInHiddenWebViewInView:(UIView *)view;
+
+- (void)preparePeakComponentWithName:(NSString *)name;
+- (void)preparePeakComponentWithName:(NSString *)name andUpdateCriteria:(PeakCoreComponentUpdateCriteria)criteria;
 
 - (void)loadPeakComponentWithName:(NSString *)name;
 - (void)loadPeakComponentWithName:(NSString *)name withCompletion:(PeakCoreOnReadyCallback)callback;

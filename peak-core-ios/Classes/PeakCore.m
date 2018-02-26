@@ -24,7 +24,7 @@
 - (void)basicInit {
     _namespace = @"peakCore";
     _name = @"peak-core-ios";
-    _version = @"0.4.4";
+    _version = @"0.5";
     _modules = [@{} mutableCopy];
     _loadingMode = PeakCoreLoadingModeBundle;
     _debug = NO;
@@ -91,6 +91,152 @@
     return self;
 }
 
+- (NSURL *)checkOrCreatePeakComponentsDirectory {
+    NSURL *documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+
+
+    BOOL isDir = YES;
+    NSURL *peakFolder = [documentsURL URLByAppendingPathComponent:@"peak-components" isDirectory:isDir];
+
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSString alloc] initWithContentsOfURL:peakFolder] isDirectory:&isDir]) {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] createDirectoryAtURL:peakFolder withIntermediateDirectories:YES attributes:nil error:&error];
+        if (error && self.debug) {
+            [self debugError:@"Error creating peak components folder. %@", [error localizedDescription]];
+        }
+    }
+
+    if (self.debug) {
+        [self debugLog:@"PeakComponents directory is %@", [peakFolder absoluteString]];
+    }
+
+    return peakFolder;
+}
+
+-(void)copyFilesFrom:(NSURL *)sourceDir to:(NSURL *)destDir {
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error = nil;
+
+
+    NSString *sourcePathString = [sourceDir relativePath];
+    NSString *destinationPathString = [destDir relativePath];
+
+    if (self.debug) {
+        [self debugLog:@"Source Path URL is %@", sourceDir];
+        [self debugLog:@"Dest Path URL is %@", destDir];
+    }
+
+    NSArray *fileList = [fileManager contentsOfDirectoryAtPath:sourcePathString error:&error];
+    if (error && self.debug) {
+        [self debugError:@"Error generating source files '%@' list for peak component. %@", sourcePathString, [error localizedDescription]];
+    } else {
+        for (NSString *s in fileList) {
+            NSString *destFilePath = [destinationPathString stringByAppendingPathComponent:s];
+            NSString *sourceFilePath = [sourcePathString stringByAppendingPathComponent:s];
+            if (![fileManager fileExistsAtPath:destFilePath]) {
+                //File does not exist, copy it
+                [fileManager copyItemAtPath:sourceFilePath toPath:destFilePath error:&error];
+            }
+        }
+    }
+}
+
+- (void)preparePeakComponentWithName:(NSString *)name {
+    [self preparePeakComponentWithName:name andUpdateCriteria:PeakCoreComponentUpdateCriteriaTimestamp];
+}
+
+- (void)preparePeakComponentWithName:(NSString *)name andUpdateCriteria:(PeakCoreComponentUpdateCriteria)criteria {
+
+    BOOL isDir = YES;
+    NSURL *peakComponentsFolder = [self checkOrCreatePeakComponentsDirectory];
+    NSURL *destinationComponentPath = [peakComponentsFolder URLByAppendingPathComponent:name isDirectory:isDir];
+
+    NSString *dirName = [NSString stringWithFormat:@"peak-components/%@", name];
+    NSURL *sourceComponentPath = [[NSBundle mainBundle] URLForResource:@"index" withExtension:@"html" subdirectory:dirName];
+    sourceComponentPath = [sourceComponentPath URLByDeletingLastPathComponent];
+
+
+    // if this folder does not exist, create it
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[destinationComponentPath path] isDirectory:&isDir]) {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] createDirectoryAtURL:destinationComponentPath withIntermediateDirectories:YES attributes:nil error:&error];
+        if (error && self.debug) {
+            [self debugError:@"Error creating '%@' component folder. %@", name, [error localizedDescription]];
+        }
+
+        // Copy the bundle files into the newly created folder
+        [self copyFilesFrom:sourceComponentPath to:destinationComponentPath];
+    } else {
+        // If it exists only overwrite if the manifest of the source file is newer (e.g. an app update has occured)
+        NSURL *sourceManifestURL = [sourceComponentPath URLByAppendingPathComponent:@"manifest.json"];
+        NSURL *destinationManifestURL = [destinationComponentPath URLByAppendingPathComponent:@"manifest.json"];
+
+        NSDictionary *sourceManifest = [self loadManifestAtPath:sourceManifestURL];
+        NSDictionary *destinationManifest = [self loadManifestAtPath:destinationManifestURL];
+
+        BOOL needsUpdate = NO;
+        switch (criteria) {
+            case PeakCoreComponentUpdateCriteriaVersion:
+                needsUpdate = ([sourceManifest[@"version"] integerValue] > [destinationManifest[@"version"] integerValue]);
+                break;
+            case PeakCoreComponentUpdateCriteriaBuildNumber:
+                needsUpdate = ([sourceManifest[@"buildnumber"] integerValue] > [destinationManifest[@"buildnumber"] integerValue]);
+                break;
+            case PeakCoreComponentUpdateCriteriaTimestamp:
+                needsUpdate = ([sourceManifest[@"timestamp"] integerValue] > [destinationManifest[@"timestamp"] integerValue]);
+                break;
+        }
+
+        if (needsUpdate) {
+            if (self.debug) {
+                [self debugLog:@"Bundle component '%@' is newer than the one within the documents folder. Updating now...", name];
+            }
+
+            NSError *error = nil;
+            [[NSFileManager defaultManager] removeItemAtPath:[destinationComponentPath relativePath] error:&error];
+            if (error && self.debug) {
+                [self debugLog:@"Cannot remove directory! %@", [error localizedDescription]];
+                return;
+            }
+
+            error = nil;
+            [[NSFileManager defaultManager] createDirectoryAtURL:destinationComponentPath withIntermediateDirectories:YES attributes:nil error:&error];
+            if (error && self.debug) {
+                [self debugError:@"Error creating '%@' component folder. %@", name, [error localizedDescription]];
+            }
+
+            [self copyFilesFrom:sourceComponentPath to:destinationComponentPath];
+
+
+        } else {
+            if (self.debug) {
+                [self debugLog:@"Bundle component '%@' is up to date.", name];
+            }
+        }
+    }
+
+}
+
+- (NSDictionary *)loadManifestAtPath:(NSURL *)manifestURL {
+    NSData * myDictData = [NSData dataWithContentsOfFile:[manifestURL path]];
+
+    if (!myDictData) {
+        return @{};
+    }
+
+    NSError *error;
+    NSDictionary * sourceManifest = [NSJSONSerialization JSONObjectWithData:myDictData
+                                                                    options:NSJSONReadingMutableContainers
+                                                                      error:&error];
+
+    if (error && self.debug) {
+        [self debugError:@"Could not read source manifest at '%@'", manifestURL];
+    }
+
+    return sourceManifest;
+}
+
 - (void)loadPeakComponentWithName:(NSString *)name {
     _onReadyCallback = nil;
     [self loadPeakComponentWithName:name withCompletion:nil];
@@ -141,16 +287,19 @@
                 self.webView.alpha = 0;
             }
 
-            NSString *dirName = [NSString stringWithFormat:@"peak-components/%@", name];
-            NSString *absoluteDirName = [NSString stringWithFormat:@"/peak-components/%@", name];
+            NSURL *documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+            BOOL isDir = YES;
+            NSURL *componentDirectory = [documentsURL URLByAppendingPathComponent:@"peak-components" isDirectory:isDir];
+            componentDirectory = [componentDirectory URLByAppendingPathComponent:name isDirectory:isDir];
 
-            NSURL *path = [[NSBundle mainBundle] URLForResource:@"index" withExtension:@"html" subdirectory:dirName];
-            if (path == nil) {
+            NSURL *indexHTML = [componentDirectory URLByAppendingPathComponent:@"index.html"];
+
+            if (indexHTML == nil) {
                 @throw [NSException exceptionWithName:@"Component not found" reason:@"Did you run gulp deploy? Did you include the folder 'peak-components' in your project?" userInfo:nil];
             }
-            NSURL *url = [NSURL fileURLWithPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingString:absoluteDirName] isDirectory:YES];
-            [self debugLog:@"Loading bundle component from %@", dirName];
-            [self.webView loadFileURL:path allowingReadAccessToURL:url];
+
+            [self debugLog:@"Loading bundle component from %@", indexHTML];
+            [self.webView loadFileURL:indexHTML allowingReadAccessToURL:componentDirectory];
             _componentName = name;
         }
 
@@ -171,13 +320,20 @@
 - (NSString *)getJavascriptAppWithName:(NSString *)name {
 
     if (self.loadingMode == PeakCoreLoadingModeBundle) {
-        NSString *dirName = [NSString stringWithFormat:@"peak-components/%@/js", name];
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"build" ofType:@"js" inDirectory:dirName];
-        if (path == nil) {
+
+        NSURL *documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+        BOOL isDir = YES;
+        NSURL *componentDirectory = [documentsURL URLByAppendingPathComponent:@"peak-components" isDirectory:isDir];
+        componentDirectory = [componentDirectory URLByAppendingPathComponent:name isDirectory:isDir];
+        componentDirectory = [componentDirectory URLByAppendingPathComponent:@"js" isDirectory:isDir];
+
+        NSURL *buildJS = [componentDirectory URLByAppendingPathComponent:@"build.js"];
+
+        if (buildJS == nil) {
             @throw [NSException exceptionWithName:@"Component not found" reason:@"Did you run gulp deploy? Did you include the folder 'peak-components' in your project?" userInfo:nil];
         }
 
-        return [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+        return [NSString stringWithContentsOfFile:[buildJS relativePath] encoding:NSUTF8StringEncoding error:NULL];
     } else {
         NSString *path = [name stringByAppendingString:@"/js/build.js"];
         NSString *completeURL = [self.localDevelopmentIPAdress stringByAppendingString:path];
@@ -205,10 +361,10 @@
     id module = [moduleClass alloc];
 
     SEL selector = NSSelectorFromString(@"initWithPeakCoreInstance:");
-    IMP imp = [moduleClass methodForSelector:selector];
+    IMP imp = [module methodForSelector:selector];
     void (*func)(id, SEL, PeakCore*) = (void *)imp;
 
-    func(moduleClass, selector, self);
+    func(module, selector, self);
 
     PeakModule *m = (PeakModule *) module;
     [m onBeforeInstallation];
